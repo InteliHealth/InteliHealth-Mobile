@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ImageBackground, Image, TouchableOpacity, Link } from 'react-native';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
+import { useNavigation } from '@react-navigation/native';
 import {
     Poppins_100Thin,
     Poppins_100Thin_Italic,
@@ -24,6 +25,8 @@ import {
 } from '@expo-google-fonts/poppins'
 
 export function Login () {
+
+    const navigation = useNavigation();
     let [fontsLoaded] = useFonts({
         Poppins_100Thin,
         Poppins_100Thin_Italic,
@@ -48,6 +51,12 @@ export function Login () {
     if (!fontsLoaded) {
         return <AppLoading />;
     }
+
+    function logar() {
+        navigation.navigate('Home')
+    }
+
+
     return (
         <View style={styles.container}>
             <ImageBackground
@@ -59,11 +68,12 @@ export function Login () {
                         style={styles.mainImgLogin}
                     />
 
-                    <TouchableOpacity
+                    <TouchableOpacity onPress={logar}
                         style={styles.btnLogin}>
                         <Text style={{
                             fontFamily: 'Regular', fontSize: 18,
                             color: '#FFFFFF'
+                            
                         }}>Entrar com Google</Text>
                         <Image source={require('../../assets/icon-google.png')}
                             style={styles.ImageButton} />
@@ -110,8 +120,6 @@ const styles = StyleSheet.create({
         borderColor: '#FC7B20',
         borderWidth: 1,
         borderRadius: 50,
-        shadowOffset: { height: 1, width: 1 },
-
     },
     ImageButton: {
         height: 30,

@@ -17,7 +17,7 @@ export default function Stack() {
       />
 
       <AuthStack.Navigator
-        initialRouteName="Home"
+        initialRouteName="Login"
         screenOptions={{
           headerShown: false,
         }}>
