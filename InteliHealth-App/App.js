@@ -8,7 +8,8 @@ const AuthStack = createStackNavigator();
 
 import {Home} from './src/screens/home';
 import {Login} from './src/screens/login';
-import Resumo from './src/screens/resumo';
+import Perfil from './src/screens/perfil'
+import Lembretes from './src/screens/lembretes';
 
 
 export default function Stack() {
@@ -19,14 +20,14 @@ export default function Stack() {
       />
 
       <AuthStack.Navigator
-        initialRouteName="Login"
+        initialRouteName="Perfil"
         screenOptions={{
           headerShown: false,
         }}>
         <AuthStack.Screen name="Login" component={Login} />
         <AuthStack.Screen name="Home" component={Home} />
-        <AuthStack.Screen name="Pefil" component={Perfil} />
-        <AuthStack.Screen name="Resumo" component={Resumo} />
+        <AuthStack.Screen name="Perfil" component={Perfil} />
+        <AuthStack.Screen name="Lembretes" component={Lembretes} />
       </AuthStack.Navigator>
     </NavigationContainer>
   )

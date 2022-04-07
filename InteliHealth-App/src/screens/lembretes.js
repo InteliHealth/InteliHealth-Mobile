@@ -6,6 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import Modal from 'react-native-modal';
 import AppLoading from 'expo-app-loading';
+import { useNavigation } from '@react-navigation/core';
 import {
     Poppins_100Thin,
     Poppins_100Thin_Italic,
@@ -28,9 +29,14 @@ import {
 } from '@expo-google-fonts/poppins'
 import { useState } from 'react';
 
+function home() {
+    navigation.navigate('Home')
+}
 
 
 export default function Resumo() {
+
+    const navigation = useNavigation();
 
     const [visible, SetVisible] = useState(false);
 
@@ -58,12 +64,16 @@ export default function Resumo() {
     if (!fontsLoaded) {
         return <AppLoading />;
     }
+    function home() {
+        navigation.navigate('Home')
+    }
     return (
         < View
             style={styles.background}>
 
             < View style={styles.header} >
                 <Image
+                    onPress={home}
                     source={require('../../assets/logo-pessoa-menor.png')}
                     style={styles.logo_header} />
             </View >
@@ -71,6 +81,7 @@ export default function Resumo() {
 
             <View>
                 <TouchableOpacity
+                    onPress={home}
                     style={styles.buttonsetaStyle}
                     activeOpacity={0.5}>
                     <Image
@@ -197,7 +208,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        marginLeft: 50,
+        alignSelf: 'center',
         backgroundColor: 'transparent',
         borderWidth: 2,
         borderRadius: 10,

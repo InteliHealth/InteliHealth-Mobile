@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { render } from 'react-dom';
 import { StyleSheet, Text, View, ImageBackground, Image, TouchableOpacity, TextInput, Button } from 'react-native';
 import { useFonts } from 'expo-font';
+import { useNavigation } from '@react-navigation/native';
 import AppLoading from 'expo-app-loading';
 import {
     Poppins_100Thin,
@@ -23,9 +24,12 @@ import {
     Poppins_900Black,
     Poppins_900Black_Italic
 } from '@expo-google-fonts/poppins'
-import { Button } from 'react-native-web';
+
 
 export default function Perfil() {
+
+    const navigation = useNavigation();
+
     let [fontsLoaded] = useFonts({
         Poppins_100Thin,
         Poppins_100Thin_Italic,
@@ -50,6 +54,11 @@ export default function Perfil() {
     if (!fontsLoaded) {
         return <AppLoading />;
     }
+
+    function home() {
+        navigation.navigate('Home')
+    }
+
     return (
         <View
             style={styles.background}>
@@ -62,6 +71,7 @@ export default function Perfil() {
 
             <View style={styles.container}>
                 <TouchableOpacity
+                    onPress={home}
                     style={styles.buttonsetaStyle}
                     activeOpacity={0.5}>
                     <Image
@@ -84,12 +94,12 @@ export default function Perfil() {
             </View>
 
             <View style={styles.container_pessoa}>
-                <Button>
-                    <Image
-                        source={require('../../assets/pessoa.png')}
-                        style={styles.logo_pessoa}
-                    />
-                </Button>
+
+                <Image
+                    source={require('../../assets/pessoa.png')}
+                    style={styles.logo_pessoa}
+                />
+
 
 
             </View>
@@ -149,12 +159,12 @@ export default function Perfil() {
             </TouchableOpacity>
 
 
-            <View style={styles.container_detalhe}>
+            {/* <View style={styles.container_detalhe}> */}
                 <Image
                     source={require('../../assets/detalhe.png')}
                     style={styles.logo_detalhe}
                 />
-            </View>
+            {/* </View> */}
 
 
 
@@ -170,7 +180,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#393939',
         width: '100%',
-        height: 48,
+        justifyContent: 'space-between',
+        // height: 48,
 
     },
 
@@ -278,7 +289,6 @@ const styles = StyleSheet.create({
     lapis: {
         height: 21,
         width: 21,
-
     },
 
 
@@ -298,15 +308,17 @@ const styles = StyleSheet.create({
         marginLeft: 120,
     },
 
+    // containter_detalhe: {
+    //     alignSelf: 'flex-end',
+    //     justifyContent: 'flex-end',
+    //     alignItems: 'baseline',
+    // },
+
     logo_detalhe: {
         width: 300,
         height: 100,
-        justifyContent: 'flex-start',
+        justifyContent: 'flex-end',
+
         alignSelf: 'center',
-        marginLeft: 25,
-        marginTop: 15,
-        // marginBottom: 100,
-
-    }
-
+    },
 })

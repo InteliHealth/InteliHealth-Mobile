@@ -73,7 +73,6 @@ export function Login () {
                         <Text style={{
                             fontFamily: 'Regular', fontSize: 18,
                             color: '#FFFFFF'
-                            
                         }}>Entrar com Google</Text>
                         <Image source={require('../../assets/icon-google.png')}
                             style={styles.ImageButton} />

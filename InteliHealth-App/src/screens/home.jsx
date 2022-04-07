@@ -7,11 +7,8 @@ import AppLoading from 'expo-app-loading';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-// import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Modal from 'react-native-modal';
-// import IconPicker from "react-native-icon-picker";
-// import IconPicker from 'react-native-vector-icon-picker';
-// import Icon from 'react-native-vector-icons';
+
  import IconPicker from './components/picker/picker';
 import {
     Poppins_100Thin,
@@ -69,6 +66,9 @@ export function Home() {
     function perfil() {
         navigation.navigate('Perfil')
     }
+    function lembretes() {
+        navigation.navigate('Lembretes')
+    }
 
     return (
         <View style={styles.container}>
@@ -76,10 +76,11 @@ export function Home() {
                 <Image
                     source={require('../../assets/text-logo.png')}
                     style={styles.logo_header} />
-                <TouchableOpacity >
+                <TouchableOpacity onPress={perfil}>
                     <Image
                         source={require('../../assets/perf-button.png')}
-                        style={styles.perfil} />
+                        style={styles.perfil} 
+                        />
                 </TouchableOpacity>
             </View>
             <View style={styles.banner}>
@@ -108,14 +109,14 @@ export function Home() {
             </View>
             <View style={styles.objetivos}>
 
-                <TouchableOpacity  >
+                <TouchableOpacity  onPress={lembretes}>
                     <View style={styles.card}>
                         <FontAwesome5 name="running" size={55} color="#FE7B1D" />
                     </View>
                     <Text style={{ fontFamily: 'Bold', fontSize: 16, textAlign: 'center', color: '#FE7B1D', marginTop: 5, }}>Exercícios</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity  >
+                <TouchableOpacity >
                     <View style={styles.card}>
                         <MaterialCommunityIcons name="sleep" size={50} color="#FE7B1D" />
                     </View>
