@@ -6,9 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 const AuthStack = createStackNavigator();
 
-import Perfil from './src/screens/perfil';
-import Topicos from './src/screens/topicos';
-import Login from './src/screens/login';
+import Resumo from './src/screens/resumo';
 
 
 export default function Stack() {
@@ -19,13 +17,11 @@ export default function Stack() {
       />
 
       <AuthStack.Navigator
-        initialRouteName="perfil"
+        initialRouteName="resumo"
         screenOptions={{
           headerShown: false,
         }}>
-        <AuthStack.Screen name="perfil" component={Perfil} />
-        <AuthStack.Screen name="login" component={Login} />
-        <AuthStack.Screen name="Topicos" component={Topicos} />
+        <AuthStack.Screen name="resumo" component={Resumo} />
       </AuthStack.Navigator>
     </NavigationContainer>
   )

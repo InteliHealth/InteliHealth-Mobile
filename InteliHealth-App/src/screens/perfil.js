@@ -158,15 +158,6 @@ export default function Perfil() {
 
 
 
-            {/* 
-            <Text style={styles.btnLoginText}>OOOOOOOOOOOOI D</Text> */}
-
-
-
-
-
-
-
 
         </View >
     );
@@ -177,7 +168,7 @@ const styles = StyleSheet.create({
 
     background: {
         flex: 1,
-        backgroundColor: '#3F3F3F',
+        backgroundColor: '#393939',
         width: '100%',
         height: 48,
 
@@ -189,6 +180,7 @@ const styles = StyleSheet.create({
         marginLeft: 305,
         marginTop: 15,
     },
+
     header: {
         backgroundColor: '#000',
         width: '100%',
