@@ -1,5 +1,10 @@
 import { StatusBar } from "expo-status-bar";
-import * as AuthSession from 'expo-auth-session';
+import React, { useState, useEffect } from "react";
+import {ResponseType} from 'expo-auth-session';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from "expo-web-browser";
+import * as firebase from 'firebase';
+import { getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 import { useNavigation } from "@react-navigation/native";
 
 import {
@@ -10,8 +15,26 @@ import {
   Image,
   TouchableOpacity,
   Link,
-  Alert
+  Alert,
+  Platform
 } from "react-native";
+
+WebBrowser.maybeCompleteAuthSession(); 
+
+if (!firebase.apps.lenght) {
+  const firebaseConfig = {
+    apiKey: "AIzaSyCUjFKfWcmsPmIcjohaKPMBWmLHffCs22Q",
+    authDomain: "intelihealth-6edaf.firebaseapp.com",
+    projectId: "intelihealth-6edaf",
+    storageBucket: "intelihealth-6edaf.appspot.com",
+    messagingSenderId: "772277287209",
+    appId: "1:772277287209:web:0436c3d2797f0b071f1f38",
+    measurementId: "G-4P6LRNW5M2"
+  };  
+
+  firebase.initializeApp(firebaseConfig);
+}
+
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import {
@@ -63,21 +86,37 @@ export function Login() {
 
   let navigation = useNavigation();
 
-  async function handleSignIn() {
-    const CLIENT_ID = '341611321921-3e98v9sp3ibprm6831ldq96v9s9kl86h.apps.googleusercontent.com';
-    const REDIRECT_URI = 'https://auth.expo.io/@zennitte/InteliHealth-App';
-    const RESPONSE_YPES = 'token';
-    const SCOPE = encodeURI('profile email openid');
+  const[request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    clientId: "772277287209-a64n95e0bsodjsqsrtud9poqh7uonuhb.apps.googleusercontent.com"
+  });
 
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_YPES}&scope=${SCOPE}`;
-    const {type, params} = await AuthSession
-      .startAsync({ authUrl });
+  useEffect(() => {
+    if (response?.type === "success") {
+      const {id_token} = response.params;
 
-    if (type === 'success') {
-      navigation.navigate('Home', {token: params.access_token});
+      const auth = getAuth();
+      const provider = new GoogleAuthProvider();
+      const credential = provider.credential(id_token);
+
+      signInWithCredential(auth, credential);
     }
-  }
+  }, [response]);
 
+  // async function handleSignIn() {
+  //   const CLIENT_ID = '341611321921-3e98v9sp3ibprm6831ldq96v9s9kl86h.apps.googleusercontent.com';
+  //   const REDIRECT_URI = 'https://auth.expo.io/@zennitte/InteliHealth-App';
+  //   const RESPONSE_YPES = 'token';
+  //   const SCOPE = encodeURI('profile email openid');
+
+  //   const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_YPES}&scope=${SCOPE}`;
+  //   const {type, params} = await AuthSession
+  //     .startAsync({ authUrl });
+
+  //   if (type === 'success') {
+  //     console.log(params);
+  //     navigation.navigate('Home', {token: params.access_token});
+  //   }
+  // }
 
   return (
     <View style={styles.container}>
@@ -91,7 +130,11 @@ export function Login() {
             style={styles.mainImgLogin}
           />
 
-          <TouchableOpacity style={styles.btnLogin} onPress={handleSignIn}>
+          <TouchableOpacity
+            disabled={!request}
+            style={styles.btnLogin}
+            onPress={() => {promptAsync()}}
+          >
             <Text
               style={{
                 fontFamily: "Regular",
