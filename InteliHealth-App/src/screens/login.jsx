@@ -1,5 +1,10 @@
 import { StatusBar } from "expo-status-bar";
-import * as AuthSession from 'expo-auth-session';
+import React, { useState, useEffect } from "react";
+import * as AuthSession from "expo-auth-session";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import api from "../services/api";
+import * as WebBrowser from "expo-web-browser";
 import { useNavigation } from "@react-navigation/native";
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
@@ -11,8 +16,13 @@ import {
   ImageBackground,
   Image,
   TouchableOpacity,
+  Link,
+  Alert,
   Platform,
 } from "react-native";
+
+WebBrowser.maybeCompleteAuthSession();
+
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import {
@@ -37,6 +47,12 @@ import {
 } from "@expo-google-fonts/poppins";
 
 export function Login() {
+  const [userData, setUserData] = useState([]);
+  const [id, setId] = useState("");
+  const [email, setEmail] = useState("");
+  const [nome, setNome] = useState("");
+  const [sobrenome, setSobrenome] = useState("");
+  const [foto, setFoto] = useState("");
 
   let [fontsLoaded] = useFonts({
     Poppins_100Thin,
@@ -65,25 +81,56 @@ export function Login() {
 
   let navigation = useNavigation();
 
+  const handleLogedUser = async (user) => {
+    const jsonUser = JSON.stringify(user);
+
+    await AsyncStorage.setItem("logedUser", jsonUser);
+  };
+
+  const handleUser = async (responseUser) => {
+    setId(responseUser.id);
+    setEmail(responseUser.email);
+    setNome(responseUser.given_name);
+    setSobrenome(responseUser.family_name);
+    setFoto(responseUser.picture);
+  };
+
   async function handleSignIn() {
-    const CLIENT_ID = '341611321921-3e98v9sp3ibprm6831ldq96v9s9kl86h.apps.googleusercontent.com';
-    const REDIRECT_URI = 'https://auth.expo.io/@zennitte/InteliHealth-App';
-    const RESPONSE_YPES = 'token';
-    const SCOPE = encodeURI('profile email openid');
+    // const CLIENT_ID =
+    //   "341611321921-3e98v9sp3ibprm6831ldq96v9s9kl86h.apps.googleusercontent.com";
+    const CLIENT_ID = "341611321921-vjoq5m34b30chn057ftp2it3mheb9c2u.apps.googleusercontent.com"
+    // const REDIRECT_URI = "https://auth.expo.io/@zennitte/InteliHealth-App";
+    const REDIRECT_URI = "https://auth.expo.io/@zennitte/intelihealth";
+    const RESPONSE_YPES = "token";
+    const SCOPE = encodeURI("profile email openid");
 
     const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_YPES}&scope=${SCOPE}`;
-    const {type, params} = await AuthSession
-      .startAsync({ authUrl });
+    const { type, params } = await AuthSession.startAsync({ authUrl });
 
-    if (type === 'success') {
-      navigation.navigate('Home', {token: params.access_token});
+    if (type === "success") {
+      await fetch(
+        `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${params.access_token}`
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          handleUser(response);
+        });
+
+      await api
+        .post("/Login", {
+          IdGoogle: id,
+          Email: email,
+          Nome: nome,
+          Sobrenome: sobrenome,
+          Foto: foto,
+        })
+        .then((usuario) => {
+          handleLogedUser(usuario.data);
+        });
+
+      navigation.navigate("Home");
     }
   }
-
-  function home() {
-    navigation.navigate('Home')
-}
-
 
   return (
     <View style={styles.container}>
@@ -97,7 +144,7 @@ export function Login() {
             style={styles.mainImgLogin}
           />
 
-          <TouchableOpacity style={styles.btnLogin} onPress={home}>
+          <TouchableOpacity style={styles.btnLogin} onPress={handleSignIn}>
             <Text
               style={{
                 fontFamily: "Regular",

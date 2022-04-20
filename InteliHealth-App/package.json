@@ -11,7 +11,11 @@
   },
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.2.2",
+<<<<<<< HEAD
     "@react-native-community/datetimepicker": "4.0.0",
+=======
+    "@react-native-async-storage/async-storage": "~1.15.0",
+>>>>>>> 5bf6d127be3d919585f23a3a1a0e633e81be5a1f
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/stack": "^6.2.1",
     "axios": "^0.26.1",
@@ -22,6 +26,8 @@
     "expo-notifications": "~0.14.0",
     "expo-random": "~12.1.1",
     "expo-status-bar": "~1.2.0",
+    "expo-updates": "~0.11.6",
+    "expo-web-browser": "~10.1.0",
     "firebase": "^9.6.10",
     "react": "17.0.1",
     "react-dom": "17.0.1",
