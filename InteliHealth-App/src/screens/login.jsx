@@ -94,9 +94,11 @@ export function Login() {
   };
 
   async function handleSignIn() {
-    const CLIENT_ID =
-      "341611321921-3e98v9sp3ibprm6831ldq96v9s9kl86h.apps.googleusercontent.com";
-    const REDIRECT_URI = "https://auth.expo.io/@zennitte/InteliHealth-App";
+    // const CLIENT_ID =
+    //   "341611321921-3e98v9sp3ibprm6831ldq96v9s9kl86h.apps.googleusercontent.com";
+    const CLIENT_ID = "341611321921-vjoq5m34b30chn057ftp2it3mheb9c2u.apps.googleusercontent.com"
+    // const REDIRECT_URI = "https://auth.expo.io/@zennitte/InteliHealth-App";
+    const REDIRECT_URI = "https://auth.expo.io/@zennitte/intelihealth";
     const RESPONSE_YPES = "token";
     const SCOPE = encodeURI("profile email openid");
 

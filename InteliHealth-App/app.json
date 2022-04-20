@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "InteliHealth-App",
-    "slug": "InteliHealth-App",
-    "scheme": "InteliHealthApp",
+    "name": "intelihealth",
+    "slug": "intelihealth",
+    "scheme": "intelihealth",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,12 +18,12 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.intelih.app",
+      "bundleIdentifier": "com.intelih.intelihealth",
       "buildNumber": "1",
       "supportsTablet": true
     },
     "android": {
-      "package": "com.intelih.app",
+      "package": "com.intelih.intelihealth",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
