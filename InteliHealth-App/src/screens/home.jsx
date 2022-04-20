@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, FlatList } from 'react-native';
 import { useFonts } from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
 import AppLoading from 'expo-app-loading';
@@ -9,7 +9,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import Modal from 'react-native-modal';
 
- import IconPicker from './components/picker/picker';
+import IconPicker from './components/picker/picker';
 import {
     Poppins_100Thin,
     Poppins_100Thin_Italic,
@@ -31,8 +31,27 @@ import {
     Poppins_900Black_Italic
 } from '@expo-google-fonts/poppins'
 import { useState } from 'react';
+import api from '../services/api';
+
+function Home() {
+    navigation.navigate('home')
+}
 
 export function Home() {
+
+    realizarCadastroTopico = async () => {
+        await api.post('/Topicos', {
+            IdUsuario: IdUsuario,
+            Nome: Nome,
+            Icone: Icone,
+        })
+
+        if (resposta.status == 200) {
+            navigation.navigate('Home')
+        }
+    }
+
+    const iconName = useState('');
 
     const navigation = useNavigation();
 
@@ -79,8 +98,8 @@ export function Home() {
                 <TouchableOpacity onPress={perfil}>
                     <Image
                         source={require('../../assets/perf-button.png')}
-                        style={styles.perfil} 
-                        />
+                        style={styles.perfil}
+                    />
                 </TouchableOpacity>
             </View>
             <View style={styles.banner}>
@@ -107,42 +126,49 @@ export function Home() {
                         alignSelf: 'flex-end'
                     }} />
             </View>
-            <View style={styles.objetivos}>
+            <View >
+                <FlatList style={styles.objetivos}
+                    keyExtractor={item => item.idTopico}
 
-                <TouchableOpacity  onPress={lembretes}>
-                    <View style={styles.card}>
-                        <FontAwesome5 name="running" size={55} color="#FE7B1D" />
-                    </View>
-                    <Text style={{ fontFamily: 'Bold', fontSize: 16, textAlign: 'center', color: '#FE7B1D', marginTop: 5, }}>Exercícios</Text>
-                </TouchableOpacity>
+                    renderItem={({ item }) => (
+                        
+                    <TouchableOpacity onPress={lembretes}>
+                        <View style={styles.card}>
+                            <FontAwesome5 name={iconName} size={55} color="#FE7B1D" />
+                        </View>
+                        <Text style={{ fontFamily: 'Bold', fontSize: 16, textAlign: 'center', color: '#FE7B1D', marginTop: 5, }}>{item.Nome}</Text>
+                    </TouchableOpacity>
+                    )}>
 
-                <TouchableOpacity >
-                    <View style={styles.card}>
-                        <MaterialCommunityIcons name="sleep" size={50} color="#FE7B1D" />
-                    </View>
+                    <TouchableOpacity >
+                        <View style={styles.card}>
+                            <MaterialCommunityIcons name="sleep" size={50} color="#FE7B1D" />
+                        </View>
 
-                    <Text style={{ fontFamily: 'Bold', fontSize: 16, textAlign: 'center', color: '#FE7B1D', marginTop: 5, }}>Sono</Text>
-                </TouchableOpacity>
+                        <Text style={{ fontFamily: 'Bold', fontSize: 16, textAlign: 'center', color: '#FE7B1D', marginTop: 5, }}>Sono</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity  >
-                    <View style={styles.card}>
-                        <FontAwesome5 name="briefcase-medical" size={45} color="#FE7B1D" />
-                    </View>
+                    <TouchableOpacity  >
+                        <View style={styles.card}>
+                            <FontAwesome5 name="briefcase-medical" size={45} color="#FE7B1D" />
+                        </View>
 
-                    <Text style={{ fontFamily: 'Bold', fontSize: 16, textAlign: 'center', color: '#FE7B1D', marginTop: 5, }}>Remédios</Text>
-                </TouchableOpacity>
+                        <Text style={{ fontFamily: 'Bold', fontSize: 16, textAlign: 'center', color: '#FE7B1D', marginTop: 5, }}>Remédios</Text>
+                    </TouchableOpacity>
+
+                </FlatList>
             </View>
             <Modal isVisible={visible}
                 swipeDirection={['up', 'right', 'down', 'left']}
                 animationIn={'fadeIn'}
-                animationInTiming= {600}
+                animationInTiming={600}
                 onSwipeComplete={() => { SetVisible(false) }}
                 onBackdropPress={() => { SetVisible(false) }}
             >
                 <View style={styles.cadastro}>
-
                     <IconPicker
                         icons={[
+
                             { family: 'AntDesign', icons: ['book', 'down', 'right', 'up'] },
                             { family: 'Entypo', icons: ['arrow-down', 'arrow-up', 'export',] },
                             { family: 'Ionicons', icons: ['book'] },

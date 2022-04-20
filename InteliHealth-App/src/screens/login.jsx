@@ -1,6 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import * as AuthSession from 'expo-auth-session';
 import { useNavigation } from "@react-navigation/native";
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
 
 import {
   StyleSheet,
@@ -9,8 +11,7 @@ import {
   ImageBackground,
   Image,
   TouchableOpacity,
-  Link,
-  Alert
+  Platform,
 } from "react-native";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
@@ -36,6 +37,7 @@ import {
 } from "@expo-google-fonts/poppins";
 
 export function Login() {
+
   let [fontsLoaded] = useFonts({
     Poppins_100Thin,
     Poppins_100Thin_Italic,
@@ -78,6 +80,10 @@ export function Login() {
     }
   }
 
+  function home() {
+    navigation.navigate('Home')
+}
+
 
   return (
     <View style={styles.container}>
@@ -91,7 +97,7 @@ export function Login() {
             style={styles.mainImgLogin}
           />
 
-          <TouchableOpacity style={styles.btnLogin} onPress={handleSignIn}>
+          <TouchableOpacity style={styles.btnLogin} onPress={home}>
             <Text
               style={{
                 fontFamily: "Regular",
