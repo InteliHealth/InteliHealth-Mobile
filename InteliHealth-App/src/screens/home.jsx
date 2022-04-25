@@ -33,23 +33,20 @@ import {
 import { useState } from 'react';
 import api from '../services/api';
 
-function Home() {
-    navigation.navigate('home')
-}
 
 export function Home() {
 
-    realizarCadastroTopico = async () => {
-        await api.post('/Topicos', {
-            IdUsuario: IdUsuario,
-            Nome: Nome,
-            Icone: Icone,
-        })
+    // realizarCadastroTopico = async () => {
+    //     await api.post('/Topicos', {
+    //         IdUsuario: IdUsuario,
+    //         Nome: Nome,
+    //         Icone: Icone,
+    //     })
 
-        if (resposta.status == 200) {
-            navigation.navigate('Home')
-        }
-    }
+    //     if (resposta.status == 200) {
+    //         navigation.navigate('Home')
+    //     }
+    // }
 
     const iconName = useState('');
 
@@ -127,7 +124,7 @@ export function Home() {
                     }} />
             </View>
             <View >
-                <FlatList style={styles.objetivos}
+                {/* <FlatList style={styles.objetivos}
                     keyExtractor={item => item.idTopico}
 
                     renderItem={({ item }) => (
@@ -156,7 +153,7 @@ export function Home() {
                         <Text style={{ fontFamily: 'Bold', fontSize: 16, textAlign: 'center', color: '#FE7B1D', marginTop: 5, }}>Remédios</Text>
                     </TouchableOpacity>
 
-                </FlatList>
+                </FlatList> */}
             </View>
             <Modal isVisible={visible}
                 swipeDirection={['up', 'right', 'down', 'left']}
@@ -206,7 +203,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#3F3F3F',
         alignItems: 'center',
-        // justifyContent: 'center',
+        justifyContent: 'center',
     },
     header: {
         width: '100%',
@@ -240,7 +237,7 @@ const styles = StyleSheet.create({
         width: 340,
         marginTop: 30,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        // justifyContent: 'space-between',
         maxWidth: 340,
     },
     card: {
