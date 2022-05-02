@@ -38,13 +38,16 @@ import {
 } from "@expo-google-fonts/poppins";
 
 export default function Perfil() {
-  const [logedUser, setLogedUser] = useState({});
-  const [isChanging, setIsChanging] = useState(false);
   const [nome, setNome] = useState("");
   const [sobrenome, setSobrenome] = useState("");
   const [foto, setFoto] = useState("");
   const [id, setId] = useState();
   const [email, setEmail] = useState("");
+
+  const logOut = async () => {
+    await AsyncStorage.removeItem('logedUser');
+    navigation.navigate('Login');
+  }
 
   const getLogedUser = async () => {
     const jsonUser = await AsyncStorage.getItem("logedUser");
@@ -163,7 +166,7 @@ export default function Perfil() {
             </TouchableOpacity>
           </View>
           
-          <TouchableOpacity style={styles.btnLogin}>
+          <TouchableOpacity style={styles.btnLogin} onPress={logOut}>
             <Text
               style={{
                 fontFamily: "Regular",
@@ -278,6 +281,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: "center",
     fontFamily: "Regular",
+    fontSize: 16
   },
 
   campo: {
