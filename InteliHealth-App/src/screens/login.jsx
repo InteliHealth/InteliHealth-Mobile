@@ -6,6 +6,8 @@ import axios from "axios";
 import api from "../services/api";
 import * as WebBrowser from "expo-web-browser";
 import { useNavigation } from "@react-navigation/native";
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
 
 import {
   StyleSheet,
@@ -130,6 +132,11 @@ export function Login() {
     }
   }
 
+  function home() {
+    navigation.navigate('Home')
+}
+
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -142,7 +149,7 @@ export function Login() {
             style={styles.mainImgLogin}
           />
 
-          <TouchableOpacity style={styles.btnLogin} onPress={handleSignIn}>
+          <TouchableOpacity style={styles.btnLogin} onPress={home}>
             <Text
               style={{
                 fontFamily: "Regular",

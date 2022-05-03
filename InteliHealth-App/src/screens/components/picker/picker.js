@@ -117,7 +117,7 @@ class IconPicker extends Component {
                     <View style={styles.card}>
                         <Ionicons name="add" size={55} color="#FE7B1D" />
                     </View>
-                    <Text style={{ fontFamily: 'Bold', fontSize: 17, textAlign: 'center', color: '#FE7B1D', marginTop: 15}}>Selecione um ícone</Text>
+                    <Text style={{ fontFamily: 'Bold', fontSize: 17, textAlign: 'center', color: '#FE7B1D', marginTop: 15 }}>Selecione um ícone</Text>
                 </TouchableOpacity>
             </>
         );

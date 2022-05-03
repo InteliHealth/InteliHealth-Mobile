@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { render } from 'react-dom';
-import { StyleSheet, Text, View, ImageBackground, Image, TouchableOpacity, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Image, TouchableOpacity, TextInput, Button, Platform } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import Modal from 'react-native-modal';
 import AppLoading from 'expo-app-loading';
 import { useNavigation } from '@react-navigation/core';
+import DateTimePicker from '@react-native-community/datetimepicker'
 import {
     Poppins_100Thin,
     Poppins_100Thin_Italic,
@@ -28,6 +29,7 @@ import {
     Poppins_900Black_Italic
 } from '@expo-google-fonts/poppins'
 import { useState } from 'react';
+import { set, setWith } from 'lodash';
 
 function home() {
     navigation.navigate('Home')
@@ -36,7 +38,31 @@ function home() {
 
 export default function Resumo() {
 
+    const [date, setDate] = useState(new Date());
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+    const [text, setText] = useState('Empty');
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShow(Platform.OS === 'ios');
+        setDate(currentDate);
+
+        let tempDate = new Date(currentDate);
+        let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() +1) + '/' + tempDate.getFullYear();
+        let fTime = tempDate.getHours() + ':' + tempDate.getMinutes();
+        setText(fTime)
+
+        console.log(fDate + '(' + fTime +')')
+    }
+
+    const showMode = (currentMode) => {
+        setShow(true);        
+        setMode(currentMode);
+    }
+
     const navigation = useNavigation();
+
 
     const [visible, SetVisible] = useState(false);
 
@@ -93,16 +119,16 @@ export default function Resumo() {
             </View>
 
             <View style={styles.container_dados}>
-                <View style={styles.nome}><Text style={{ fontFamily: 'Black', color: '#FFFFFF', fontSize: 20, }}  >Treino Diário </Text>
+                <View style={styles.nome}><Text style={{ fontFamily: 'Bold', color: '#FFFFFF', fontSize: 20, }}  >Treino Diário - 20:00 </Text>
                     <Modal isVisible={visible}
                         onBackdropPress={() => { SetVisible(false) }}>
                         <View style={styles.backgroundModal}>
                             <View style={styles.container_dadosModal}>
-                                <TextInput style={styles.lembrete}> Treino Diário</TextInput>
+                                <TextInput style={styles.lembrete}> Treino Diário - </TextInput>
                             </View>
 
                             <View style={styles.container_dadosModal}>
-                                <TextInput style={styles.lembrete}> 20:00 </TextInput>
+                                <TouchableOpacity onPress={() => showMode('time')} style={styles.lembrete}><Text>{text}</Text></TouchableOpacity>
                             </View>
 
                             <TouchableOpacity
@@ -112,6 +138,19 @@ export default function Resumo() {
                                     color: '#FFFFFF'
                                 }}>Atualizar</Text>
                             </TouchableOpacity>
+                        
+                        {show && (
+                            <DateTimePicker
+                            testID = 'dateTimePicker'
+                            value={date}
+                            mode={mode}
+                            is24Hour={true}
+                            display='default'
+                            onChange={onChange}
+                            
+                            
+                            />
+                        )}
                         </View>
 
                     </Modal>
@@ -191,7 +230,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
 
         backgroundColor: 'transparent',
         borderWidth: 2,
@@ -220,7 +259,7 @@ const styles = StyleSheet.create({
     },
 
     engrenagem: {
-        marginLeft: 10,
+
     },
 
     backgroundModal: {
