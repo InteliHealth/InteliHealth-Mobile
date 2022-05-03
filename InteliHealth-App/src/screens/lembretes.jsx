@@ -123,7 +123,7 @@ export default function Resumo() {
 
             <View style={styles.container_dados1}>
                 <TouchableOpacity onPress={() => { SetVisible(false) }}>
-                    <MaterialIcons style={styles.nome1} style={{ fontFamily: 'Black', color: '#FC791C', }} name="add" size={35} color="black" />
+                    <MaterialIcons style={styles.nome1}  name="add" size={35} color="black" />
                 </TouchableOpacity>
             </View>
         </View >
