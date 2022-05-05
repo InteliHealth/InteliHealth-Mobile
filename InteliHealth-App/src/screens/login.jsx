@@ -133,7 +133,6 @@ export function Login() {
     }
   }
 
-
   return (
     <View style={styles.container}>
       <ImageBackground
