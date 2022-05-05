@@ -162,11 +162,7 @@ export default function Resumo() {
 
             <View style={styles.container_dados1}>
                 <TouchableOpacity onPress={() => { SetVisible(false) }}>
-<<<<<<< HEAD
                     <MaterialIcons style={styles.nome1}  name="add" size={35} color="black" />
-=======
-                    <MaterialIcons style={styles.nome1} styles={{ fontFamily: 'Black', color: '#FC791C', }} name="add" size={35} color="black" />
->>>>>>> 862eca37163c04747e2cd35c907b3bbd1915c185
                 </TouchableOpacity>
             </View>
         </View >

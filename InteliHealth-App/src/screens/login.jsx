@@ -85,7 +85,6 @@ export function Login() {
     const jsonUser = JSON.stringify(user);
 
     await AsyncStorage.setItem("logedUser", jsonUser);
-    console.log(await AsyncStorage.getItem("logedUser"));
   };
 
   const handleUser = async (responseUser) => {
