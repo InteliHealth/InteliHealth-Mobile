@@ -47,8 +47,8 @@ import {
 } from "@expo-google-fonts/poppins";
 
 export function Login() {
-  const [userData, setUserData] = useState([]);
   const [id, setId] = useState("");
+  const [idUser, setIdUser] = useState(0);
   const [email, setEmail] = useState("");
   const [nome, setNome] = useState("");
   const [sobrenome, setSobrenome] = useState("");
@@ -85,6 +85,7 @@ export function Login() {
     const jsonUser = JSON.stringify(user);
 
     await AsyncStorage.setItem("logedUser", jsonUser);
+    console.log(await AsyncStorage.getItem("logedUser"));
   };
 
   const handleUser = async (responseUser) => {
@@ -132,10 +133,6 @@ export function Login() {
     }
   }
 
-  function home() {
-    navigation.navigate('Home')
-}
-
 
   return (
     <View style={styles.container}>
@@ -149,7 +146,7 @@ export function Login() {
             style={styles.mainImgLogin}
           />
 
-          <TouchableOpacity style={styles.btnLogin} onPress={home}>
+          <TouchableOpacity style={styles.btnLogin} onPress={handleSignIn}>
             <Text
               style={{
                 fontFamily: "Regular",

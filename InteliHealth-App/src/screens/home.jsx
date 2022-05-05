@@ -38,11 +38,15 @@ import {
   Poppins_900Black_Italic,
 } from "@expo-google-fonts/poppins";
 import { useState, useEffect } from "react";
+import api from "../services/api";
 
 export function Home() {
   const [open, setOpen] = useState(false);
   const navigation = useNavigation();
+  const [idUsuario, setIdUsuario] = useState(0);
+  const [nome, setNome] = useState('');
   const [icone, setIcone] = useState("");
+  const [listaTopico, setListaTopico] = useState([]);
 
   const [visible, SetVisible] = useState(false);
 
@@ -82,12 +86,38 @@ export function Home() {
     navigation.navigate("Lembretes");
   }
 
-  function progress() {
-      console.log(icone)
+  const createTopic = async () => {
+    api.post("/Topicos",{
+      idUsuario: idUsuario,
+      nome: nome,
+      icone: icone,
+    })
+    .then(response => {
+      if (response.status === 201) {
+        setIcone('');
+        setNome('');
+      }
+    })
+    .catch(error => {
+      console.log(error)
+    })
   }
 
-  DropDownPicker.setTheme("DARK");
+  const listTopic = async () => {
+    api(`/Topicos/Meus/${idUsuario}`)
+      .then(response => {
+        if (response.status === 200) {
+          setListaTopico(response.data);
+        }
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 
+  function progress() {
+    console.log(icone);
+  }
 
   return (
     <View style={styles.container}>
@@ -215,44 +245,120 @@ export function Home() {
             value={icone}
             setValue={(icone) => setIcone(icone)}
             onClose={() => setOpen(false)}
+            dropDownContainerStyle={{ backgroundColor: "#292929", borderColor:"#FE7B1D" }}
+            labelStyle={{ color: "#FFFFFF" }}
+            placeholderStyle={{ backgroundColor: "#292929" }}
+            style={{ backgroundColor: "#292929", borderColor: "#FE7B1D" }}
             items={[
               {
                 label: "Correr",
-                value: "Correr",
+                value:
+                  "https://raw.githubusercontent.com/InteliHealth/InteliHealth-Images/092e1693ba0315c6e08778ff89aee6a53cd65c63/Running/running-svgrepo-com.svg",
                 icon: () => (
-                  <FontAwesome5 name="running" size={24} color="black" />
+                  <FontAwesome5
+                    name="running"
+                    size={24}
+                    color="black"
+                    style={{ color: "#FE7B1D" }}
+                  />
                 ),
                 selectable: true,
               },
               {
                 label: "Dormir",
-                value: "Dormir",
+                value:
+                  "https://raw.githubusercontent.com/InteliHealth/InteliHealth-Images/092e1693ba0315c6e08778ff89aee6a53cd65c63/Sleep/sleep-svgrepo-com.svg",
                 icon: () => (
                   <MaterialCommunityIcons
                     name="sleep"
                     size={24}
                     color="black"
+                    style={{ color: "#FE7B1D" }}
                   />
                 ),
                 selectable: true,
               },
               {
                 label: "Medicamentos",
-                value: "Medicamentos",
+                value:
+                  "https://raw.githubusercontent.com/InteliHealth/InteliHealth-Images/092e1693ba0315c6e08778ff89aee6a53cd65c63/Medical/briefcase-medical-svgrepo-com.svg",
                 icon: () => (
                   <FontAwesome5
                     name="briefcase-medical"
                     size={24}
                     color="black"
+                    style={{ color: "#FE7B1D" }}
                   />
                 ),
                 selectable: true,
               },
               {
-                label: "Fazer Exercícios",
-                value: "Fazer Exercícios",
+                label: "Exercícios",
+                value:
+                  "https://raw.githubusercontent.com/InteliHealth/InteliHealth-Images/092e1693ba0315c6e08778ff89aee6a53cd65c63/Dumbell/dumbell-svgrepo-com.svg",
                 icon: () => (
-                  <FontAwesome5 name="dumbbell" size={24} color="black" />
+                  <FontAwesome5
+                    name="dumbbell"
+                    size={24}
+                    color="black"
+                    style={{ color: "#FE7B1D" }}
+                  />
+                ),
+                selectable: true,
+              },
+              {
+                label: "Meditar",
+                value:
+                  "https://raw.githubusercontent.com/InteliHealth/InteliHealth-Images/092e1693ba0315c6e08778ff89aee6a53cd65c63/Meditate/meditation-meditate-mindful-mindfulness-svgrepo-com.svg",
+                icon: () => (
+                  <MaterialCommunityIcons
+                    name="meditation"
+                    size={24}
+                    color="black"
+                    style={{ color: "#FE7B1D" }}
+                  />
+                ),
+                selectable: true,
+              },
+              {
+                label: "Estudos",
+                value:
+                  "https://raw.githubusercontent.com/InteliHealth/InteliHealth-Images/092e1693ba0315c6e08778ff89aee6a53cd65c63/School/school-svgrepo-com.svg",
+                icon: () => (
+                  <FontAwesome5
+                    name="school"
+                    size={24}
+                    color="black"
+                    style={{ color: "#FE7B1D" }}
+                  />
+                ),
+                selectable: true,
+              },
+              {
+                label: "Leitura",
+                value:
+                  "https://raw.githubusercontent.com/InteliHealth/InteliHealth-Images/092e1693ba0315c6e08778ff89aee6a53cd65c63/Book/book-svgrepo-com.svg",
+                icon: () => (
+                  <FontAwesome5
+                    name="book"
+                    size={24}
+                    color="black"
+                    style={{ color: "#FE7B1D" }}
+                  />
+                ),
+                selectable: true,
+              },
+              {
+                label: "Água",
+                value:
+                  "https://raw.githubusercontent.com/InteliHealth/InteliHealth-Images/092e1693ba0315c6e08778ff89aee6a53cd65c63/Water/water-svgrepo-com.svg",
+                icon: () => (
+                  <Ionicons
+                    name="water"
+                    size={24}
+                    color="black"
+                    style={{ color: "#FE7B1D" }}
+                  />
                 ),
                 selectable: true,
               },
@@ -271,8 +377,10 @@ export function Home() {
               borderBottomWidth: 1,
               height: 35,
             }}
+            placeholder="Nome"
+            placeholderTextColor={'#FFF'}
           >
-            Nome
+            
           </TextInput>
           <TouchableOpacity style={styles.btn_criar}>
             <Text

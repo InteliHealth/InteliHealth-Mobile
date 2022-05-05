@@ -56,7 +56,7 @@ export default function Perfil() {
     }
 
     function home() {
-        navigation.navigate('Home')
+        navigation.navigate('Login')
     }
 
     return (
@@ -151,6 +151,7 @@ export default function Perfil() {
             </View>
 
             <TouchableOpacity
+                onPress={home}
                 style={styles.btnLogin}>
                 <Text style={{
                     fontFamily: 'Regular', fontSize: 18,
