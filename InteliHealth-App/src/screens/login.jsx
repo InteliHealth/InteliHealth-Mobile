@@ -45,6 +45,7 @@ import {
   Poppins_900Black,
   Poppins_900Black_Italic,
 } from "@expo-google-fonts/poppins";
+import { getLogedUser } from "../services/auth";
 
 export function Login() {
   const [id, setId] = useState("");
@@ -53,6 +54,14 @@ export function Login() {
   const [nome, setNome] = useState("");
   const [sobrenome, setSobrenome] = useState("");
   const [foto, setFoto] = useState("");
+
+  let navigation = useNavigation();
+
+  useEffect(() => {
+    if (getLogedUser !== null) {
+      navigation.navigate("Home");
+    }
+  }, []);
 
   let [fontsLoaded] = useFonts({
     Poppins_100Thin,
@@ -78,8 +87,6 @@ export function Login() {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-
-  let navigation = useNavigation();
 
   const handleLogedUser = async (user) => {
     const jsonUser = JSON.stringify(user);

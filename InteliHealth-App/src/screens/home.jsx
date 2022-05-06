@@ -57,6 +57,10 @@ export function Home() {
     getUser();
   }, []);
 
+  useEffect(() => {
+    listTopic();
+  }, []);
+
   let [fontsLoaded] = useFonts({
     Poppins_100Thin,
     Poppins_100Thin_Italic,
@@ -92,11 +96,20 @@ export function Home() {
   async function getUser() {
     const { idUsuario, nome } = await getLogedUser();
     setIdUser(idUsuario);
+    console.log(idUser);
     setUsername(nome);
+    console.log(username);
   }
 
+  const closeModal = async () => {
+    setIcone("");
+    setNome("");
+    SetVisible(false);
+    setOpen(false);
+  };
+
   const createTopic = async () => {
-    api
+    await api
       .post("/Topicos", {
         idUsuario: idUser,
         nome: nome,
@@ -114,17 +127,20 @@ export function Home() {
       });
   };
 
-  const listTopic = async () => {
-    api(`/Topicos/Meus/${idUser}`)
+  async function listTopic() {
+    const { idUsuario } = await getLogedUser();
+
+    await api("/Topicos/Meus/" + idUsuario)
       .then((response) => {
         if (response.status === 200) {
           setListaTopico(response.data);
+          console.log(listaTopico);
         }
       })
       .catch((error) => {
         console.log(error);
       });
-  };
+  }
 
   return (
     <ScrollView style={styles.main}>
@@ -152,7 +168,7 @@ export function Home() {
                 marginTop: 10,
               }}
             >
-              Bem-<Text style={{ color: "#FE7B1D" }}>Vindo,</Text>
+              Bem-<Text style={{ color: "#FE7B1D" }}>Vindo, </Text>
               {username}
             </Text>
             <Text
@@ -188,10 +204,10 @@ export function Home() {
           animationIn={"fadeIn"}
           animationInTiming={600}
           onSwipeComplete={() => {
-            SetVisible(false);
+            closeModal();
           }}
           onBackdropPress={() => {
-            SetVisible(false);
+            closeModal();
           }}
         >
           <View style={styles.cadastro}>
@@ -371,6 +387,10 @@ export function Home() {
             </TouchableOpacity>
           </View>
         </Modal>
+        {/* <View>
+          <FlatList data={listaTopico} keyExtractor={(item) => item.idTopico} horizontal={true} />
+        </View> */}
+
         <TouchableOpacity
           onPress={() => {
             SetVisible(true);
@@ -447,8 +467,8 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: '#FE7B1D',
     backgroundColor: "#272727",
-    // position: "absolute",
-    display: "flex",
+    position: "absolute",
+    // display: "flex",
     bottom: 20,
     right: 20,
     width: 60,

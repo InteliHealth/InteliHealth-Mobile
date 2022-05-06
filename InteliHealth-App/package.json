@@ -34,6 +34,7 @@
     "react-native-icon-picker": "^1.0.6",
     "react-native-modal": "^13.0.1",
     "react-native-safe-area-context": "3.3.2",
+    "react-native-svg": "12.1.1",
     "react-native-vector-icon-picker": "^0.1.0",
     "react-native-web": "0.17.1"
   },
