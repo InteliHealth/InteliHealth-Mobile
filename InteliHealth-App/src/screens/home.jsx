@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import DropDownPicker from "react-native-dropdown-picker";
+import Svg, { SvgUri } from "react-native-svg";
 import {
   StyleSheet,
   Text,
@@ -52,6 +53,9 @@ export function Home() {
   const [icone, setIcone] = useState("");
   const [listaTopico, setListaTopico] = useState([]);
   const [visible, SetVisible] = useState(false);
+  const [loadingImg, setLoadingImg] = useState(
+    "https://raw.githubusercontent.com/InteliHealth/InteliHealth-Images/1d98cf8e13ce334a6d72bdf18ab19d9ab3a54eb9/Loading/loading-svgrepo-com.svg"
+  );
 
   useEffect(() => {
     getUser();
@@ -121,6 +125,9 @@ export function Home() {
           setNome("");
           SetVisible(false);
         }
+      })
+      .then(() => {
+        listTopic();
       })
       .catch((error) => {
         console.log(error);
@@ -327,7 +334,7 @@ export function Home() {
                 {
                   label: "Leitura",
                   value:
-                    "https://raw.githubusercontent.com/InteliHealth/InteliHealth-Images/092e1693ba0315c6e08778ff89aee6a53cd65c63/Book/book-svgrepo-com.svg",
+                    "https://raw.githubusercontent.com/InteliHealth/InteliHealth-Images/main/Book/book-svgrepo-com.png",
                   icon: () => (
                     <FontAwesome5
                       name="book"
@@ -387,9 +394,30 @@ export function Home() {
             </TouchableOpacity>
           </View>
         </Modal>
-        {/* <View>
-          <FlatList data={listaTopico} keyExtractor={(item) => item.idTopico} horizontal={true} />
-        </View> */}
+        <View>
+          {listaTopico.map((topico) => {
+            return (
+              <View key={topico.idTopico}>
+                <TouchableOpacity>
+                  <View>
+                    <SvgUri width="50" height="50" uri="http://thenewcode.com/assets/images/thumbnails/homer-simpson.svg" color="#fff"/>
+                  </View>
+                </TouchableOpacity>
+                <Text
+                  style={{
+                    fontFamily: "Bold",
+                    fontSize: 16,
+                    textAlign: "center",
+                    color: "#FE7B1D",
+                    marginTop: 5,
+                  }}
+                >
+                  {topico.nome}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
 
         <TouchableOpacity
           onPress={() => {
