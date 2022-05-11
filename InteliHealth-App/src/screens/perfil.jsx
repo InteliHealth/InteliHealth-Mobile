@@ -61,6 +61,7 @@ export default function Perfil() {
     setEmail(email);
     setFoto(foto);
     setId(idUsuario);
+    console.log(foto)
   };
 
   useEffect(() => {

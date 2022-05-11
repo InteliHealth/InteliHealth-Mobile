@@ -6,7 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import Modal from 'react-native-modal';
 import AppLoading from 'expo-app-loading';
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, useRoute } from "@react-navigation/native";
 import DateTimePicker from '@react-native-community/datetimepicker'
 import {
     Poppins_100Thin,
@@ -28,12 +28,8 @@ import {
     Poppins_900Black,
     Poppins_900Black_Italic
 } from '@expo-google-fonts/poppins'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { set, setWith } from 'lodash';
-
-function home() {
-    navigation.navigate('Home')
-}
 
 
 export default function Resumo() {
@@ -42,6 +38,14 @@ export default function Resumo() {
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
     const [text, setText] = useState('Empty');
+
+    const route = useRoute();
+
+    const {id} = route.params;
+
+    useEffect(() => {
+        console.log(id);
+    }, []);
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
