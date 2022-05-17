@@ -1,5 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import { render } from "react-dom";
+import moment from "moment";
+import "moment/locale/pt-br";
+import DropDownPicker from "react-native-dropdown-picker";
 import {
   StyleSheet,
   Text,
@@ -40,47 +43,96 @@ import {
 } from "@expo-google-fonts/poppins";
 import { useState, useEffect } from "react";
 import { set, setWith } from "lodash";
+import api from "../services/api";
+
+moment.locale("pt-br");
 
 export default function Resumo() {
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
-  const [show, setShow] = useState(false);
-  const [text, setText] = useState("Empty");
+  const [listReminder, setListReminder] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [nome, setNome] = useState("");
+  const [date, setDate] = useState("");
+  const [visible, SetVisible] = useState(false);
+  const [isShow, setIsShow] = useState(true);
+
+  useEffect(() => {
+    let onProgress = true;
+    listReminders();
+    return () => {
+      onProgress = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let onProgress = true;
+    console.warn("AAAAAAAAAA")
+    // if (listReminder.length === 0) {
+    //   console.warn("Entrou no If")
+    //   setIsShow(true);
+    //   console.warn(isShow)
+    // }
+    if (listReminder.length > 0) {
+      console.warn("Entrou no else")
+      setIsShow(false);
+      console.warn(isShow)
+    }
+      
+    return () => {
+      onProgress = false;
+    };
+  }, []);
+  
 
   const route = useRoute();
 
   const { id } = route.params;
 
-  useEffect(() => {
-    console.log(id);
-  }, []);
-
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setDate(currentDate);
-
-    let tempDate = new Date(currentDate);
-    let fDate =
-      tempDate.getDate() +
-      "/" +
-      (tempDate.getMonth() + 1) +
-      "/" +
-      tempDate.getFullYear();
-    let fTime = tempDate.getHours() + ":" + tempDate.getMinutes();
-    setText(fTime);
-
-    console.log(fDate + "(" + fTime + ")");
+  const closeModal = async () => {
+    setDate("");
+    setNome("");
+    SetVisible(false);
+    setOpen(false);
   };
 
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
+  const changeShow = async() =>{
+    setIsShow(!isShow);
+  }
+
+  async function listReminders() {
+    await api("/Lembretes/Meus/" + id)
+      .then((response) => {
+        if (response.status === 200) {
+          setListReminder(response.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  const createReminder = async () => {
+    await api
+      .post("/Lembretes", {
+        idTopico: id,
+        titulo: nome,
+        horario: date,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          setDate("");
+          setNome("");
+          SetVisible(false);
+        }
+      })
+      .then(() => {
+        listReminders();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const navigation = useNavigation();
-
-  const [visible, SetVisible] = useState(false);
 
   let [fontsLoaded] = useFonts({
     Poppins_100Thin,
@@ -131,85 +183,122 @@ export default function Resumo() {
           />
         </TouchableOpacity>
       </View>
-
-      <View style={styles.container_dados}>
-        <View style={styles.nome}>
-          <Text style={{ fontFamily: "Bold", color: "#FFFFFF", fontSize: 20 }}>
-            Treino Diário - 20:00{" "}
-          </Text>
-          <Modal
-            isVisible={visible}
-            onBackdropPress={() => {
-              SetVisible(false);
+      <Modal
+        isVisible={visible}
+        swipeDirection={["right", "left"]}
+        animationIn={"fadeIn"}
+        animationInTiming={600}
+        onSwipeComplete={() => {
+          closeModal();
+        }}
+        onBackdropPress={() => {
+          closeModal();
+        }}
+      >
+        <View style={styles.cadastro}>
+          <DropDownPicker
+            placeholder="Selecione o horário da notificação"
+            open={open}
+            value={date}
+            setValue={(date) => setDate(date)}
+            onPress={() => setOpen(!open)}
+            onClose={() => setOpen(false)}
+            dropDownContainerStyle={{
+              backgroundColor: "#292929",
+              borderColor: "#FE7B1D",
             }}
-          >
-            <View style={styles.backgroundModal}>
-              <View style={styles.container_dadosModal}>
-                <TextInput placeholder="Nome" placeholderTextColor="#fff" style={styles.lembrete}></TextInput>
-              </View>
-
-              <View style={styles.container_dadosModal}>
-                <TouchableOpacity
-                  onPress={() => showMode("time")}
-                  style={styles.lembrete}
-                >
-                  <Text>{text}</Text>
-                </TouchableOpacity>
-              </View>
-
-              <TouchableOpacity style={styles.btnLogin}>
-                <Text
-                  style={{
-                    fontFamily: "Regular",
-                    fontSize: 18,
-                    color: "#FFFFFF",
-                  }}
-                >
-                  Atualizar
-                </Text>
-              </TouchableOpacity>
-
-              {show && (
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={date}
-                  mode={mode}
-                  is24Hour={true}
-                  display="default"
-                  onChange={onChange}
-                />
-              )}
-            </View>
-          </Modal>
+            labelStyle={{ color: "#FFFFFF" }}
+            placeholderStyle={{
+              backgroundColor: "#292929",
+              color: "#FFFFFF",
+            }}
+            style={{ backgroundColor: "#292929", borderColor: "#FE7B1D" }}
+            dropDownStyle={{
+              backgroundColor: "#292929",
+              borderColor: "#FE7B1D",
+            }}
+            arrowIconStyle={{ backgroundColor: "#FE7B1D" }}
+            items={[
+              {
+                label: "Manhã",
+                value: "2030-12-31 10:00:00.000",
+                labelStyle: { color: "#fff" },
+                selectable: true,
+              },
+              {
+                label: "Tarde",
+                value: "2030-12-31 17:00:00.000",
+                labelStyle: { color: "#fff" },
+                selectable: true,
+              },
+              {
+                label: "Noite",
+                value: "2030-12-31 22:00:00.000",
+                labelStyle: { color: "#fff" },
+                selectable: true,
+              },
+            ]}
+          />
+          <TextInput
+            style={{
+              fontFamily: "Regular",
+              fontSize: 16,
+              color: "#FFFFFF",
+              width: 150,
+              height: 170,
+              marginLeft: 20,
+              marginTop: 10,
+              borderBottomColor: "#FE7B1D",
+              borderBottomWidth: 1,
+              height: 35,
+            }}
+            placeholder="Nome"
+            placeholderTextColor={"#FFF"}
+            value={nome}
+            onChangeText={(nome) => setNome(nome)}
+          ></TextInput>
+          <TouchableOpacity style={styles.btn_criar} onPress={createReminder}>
+            <Text
+              style={{
+                fontFamily: "Regular",
+                fontSize: 16,
+                color: "#FFFFFF",
+              }}
+            >
+              Criar
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+      {isShow && (
+        <View style={styles.container_dados1}>
           <TouchableOpacity
             onPress={() => {
               SetVisible(true);
             }}
           >
-            <FontAwesome
-              style={styles.engrenagem}
-              name="gear"
-              size={25}
-              color="white"
+            <MaterialIcons
+              style={styles.nome1}
+              name="add"
+              size={35}
+              color="black"
             />
           </TouchableOpacity>
         </View>
-      </View>
-
-      <View style={styles.container_dados1}>
-        <TouchableOpacity
-          onPress={() => {
-            SetVisible(false);
-          }}
-        >
-          <MaterialIcons
-            style={styles.nome1}
-            name="add"
-            size={35}
-            color="black"
-          />
-        </TouchableOpacity>
-      </View>
+      )}
+      {!isShow && (
+        <View style={styles.container_not}>
+          {listReminder.map((item) => {
+            return (
+              <View key={item.idLembrete}>
+                <Text style={styles.hora}>
+                  {moment(item.horario).format("LT")}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
+      )}
     </View>
   );
 }
@@ -291,6 +380,32 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 
+  container_not: {
+    color: "#FFFF",
+    borderColor: "#FC791C",
+    width: 270,
+    height: 70,
+    marginTop: 40,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    alignContent: "center",
+    alignSelf: "center",
+    textAlign: "center",
+    textAlignVertical: "center",
+    backgroundColor: "transparent",
+    borderWidth: 2,
+    borderRadius: 10,
+  },
+
+  hora: {
+    color: "#FC791C",
+    fontSize: 20,
+    fontFamily: "Regular",
+    textAlign: "center",
+    textAlignVertical: "center",
+  },
+
   nome1: {
     color: "#FC791C",
   },
@@ -328,5 +443,24 @@ const styles = StyleSheet.create({
     borderColor: "#FC7B20",
     borderWidth: 1,
     borderRadius: 50,
+  },
+  cadastro: {
+    width: 260,
+    height: 320,
+    backgroundColor: "#292929",
+    borderRadius: 20,
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    alignSelf: "center",
+  },
+  btn_criar: {
+    height: 45,
+    width: 120,
+    backgroundColor: "transparent",
+    borderColor: "#FC7B20",
+    borderWidth: 1,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
