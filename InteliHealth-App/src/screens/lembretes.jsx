@@ -43,20 +43,26 @@ import {
 } from "@expo-google-fonts/poppins";
 import { useState, useEffect } from "react";
 import { set, setWith } from "lodash";
+import { AntDesign } from "@expo/vector-icons";
 import api from "../services/api";
 
 moment.locale("pt-br");
 
 export default function Resumo() {
   const [listReminder, setListReminder] = useState([]);
+  const [listResponse, setListResponse] = useState([]);
   const [open, setOpen] = useState(false);
   const [nome, setNome] = useState("");
   const [date, setDate] = useState("");
   const [visible, SetVisible] = useState(false);
-  const [isShow, setIsShow] = useState(true);
+  const [updateVisibility, setUpdateVisibility] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
+  const [isShow, setIsShow] = useState(false);
+  const [notId, setNotId] = useState();
 
   useEffect(() => {
     let onProgress = true;
+    console.log(id);
     listReminders();
     return () => {
       onProgress = false;
@@ -65,41 +71,96 @@ export default function Resumo() {
 
   useEffect(() => {
     let onProgress = true;
-    console.warn("AAAAAAAAAA")
-    // if (listReminder.length === 0) {
-    //   console.warn("Entrou no If")
-    //   setIsShow(true);
-    //   console.warn(isShow)
-    // }
     if (listReminder.length > 0) {
-      console.warn("Entrou no else")
+      // console.warn("Entrou no else");
       setIsShow(false);
-      console.warn(isShow)
+      // console.warn(isShow);
+      let a;
     }
-      
     return () => {
       onProgress = false;
     };
   }, []);
-  
+
+  useEffect(() => {
+    let onProgress = true;
+    listResponses();
+    return () => {
+      onProgress = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log(filterByWeek(listResponse));
+  }, []);
 
   const route = useRoute();
 
   const { id } = route.params;
 
-  const closeModal = async () => {
+  const closeModal = () => {
     setDate("");
     setNome("");
     SetVisible(false);
     setOpen(false);
   };
 
-  const changeShow = async() =>{
-    setIsShow(!isShow);
-  }
+  const closeUpdateModal = () => {
+    setDate("");
+    setNome("");
+    setUpdateVisibility(false);
+    setUpdateOpen(false);
+  };
 
-  async function listReminders() {
-    await api("/Lembretes/Meus/" + id)
+  const openUpdateModal = (id) => {
+    setUpdateVisibility(true);
+    setNotId(id);
+    console.log(notId);
+  };
+
+  const createTrueResponse = () => {
+    api
+      .post("/Respostas", {
+        idTopico: id,
+        realizado: true,
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const createFalseResponse = () => {
+    api
+      .post("/Respostas", {
+        idTopico: id,
+        realizado: false,
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const updateReminder = () => {
+    api
+      .put("/Lembretes/" + notId, {
+        horario: date,
+      })
+      .then((response) => {
+        if (response.status === 204) {
+          setDate("");
+          setUpdateVisibility(false);
+        }
+      })
+      .then(() => {
+        listReminders();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  function listReminders() {
+    api("/Lembretes/Meus/" + id)
       .then((response) => {
         if (response.status === 200) {
           setListReminder(response.data);
@@ -110,8 +171,8 @@ export default function Resumo() {
       });
   }
 
-  const createReminder = async () => {
-    await api
+  function createReminder() {
+    api
       .post("/Lembretes", {
         idTopico: id,
         titulo: nome,
@@ -130,7 +191,73 @@ export default function Resumo() {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  const listResponses = () => {
+    api("/Respostas/Meus/" + id)
+      .then((response) => {
+        setListResponse(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+
+  const lastWeek = () => {
+    var result = moment().subtract(6, "days").hours(0);
+    return result;
+  }
+
+  const nextDay = () => {
+    var result = moment().add(1, "days").hours(0);
+    return result;
+  }
+
+  const lastMonth = () => {
+    var result = moment().subtract(29, "days").hours(0);
+    return result;
+  }
+
+  const lastYear = () => {
+    var result = moment().subtract(364, "days").hours(0);
+    return result;
+  }
+
+  const filterByWeek = (listResponse) => {
+    return listResponse.filter((response) => {
+      return (moment(response.dataCriacao) > lastWeek()) && (moment(response.dataCriacao) < nextDay());
+    });
+  }
+
+  const filterByMonth = (listResponse) => {
+    return listResponse.filter((response) => {
+      return (moment(response.dataCriacao) > lastMonth()) && (moment(response.dataCriacao) < nextDay());
+    })
+  }
+
+  const filterByYear = (listResponse) => {
+    return listResponse.filter((response) => {
+      return (moment(response.dataCriacao) > lastYear()) && (moment(response.dataCriacao) < nextDay());
+    })
+  }
+
+  // const filterByWeek = () => {
+  //   const today = new Date();
+  //   const startDay = moment(today).subtract(6, "days").format("LLLL");
+  //   const lastDay = moment(today).add(2, "days").format("LLLL");
+
+  //   return listResponse.filter((response) => (response.dataCriacao < lastDay));
+
+  //   // return listResponse.filter((response) => {
+  //   //   const launchDate = response.dataCriacao;
+  //   //   // console.warn(launchDate)
+  //   //   // return launchDate >= startDay && launchDate <= lastDay;
+  //   //   // return launchDate > startDay && launchDate < lastDay;
+
+  //   //   // return response.dataCriacao > startDay || response.dataCriacao <= lastDay;
+  //   //   // return moment(launchDate).isBetween(startDay, lastDay)
+  //   // });
+  // };
 
   const navigation = useNavigation();
 
@@ -270,6 +397,75 @@ export default function Resumo() {
           </TouchableOpacity>
         </View>
       </Modal>
+      <Modal
+        isVisible={updateVisibility}
+        swipeDirection={["right", "left"]}
+        animationIn={"fadeIn"}
+        animationInTiming={600}
+        onSwipeComplete={() => {
+          closeUpdateModal();
+        }}
+        onBackdropPress={() => {
+          closeUpdateModal();
+        }}
+      >
+        <View style={styles.cadastro}>
+          <DropDownPicker
+            placeholder="Selecione o horário da notificação"
+            open={updateOpen}
+            value={date}
+            setValue={(date) => setDate(date)}
+            onPress={() => setUpdateOpen(!updateOpen)}
+            onClose={() => setUpdateOpen(false)}
+            dropDownContainerStyle={{
+              backgroundColor: "#292929",
+              borderColor: "#FE7B1D",
+            }}
+            labelStyle={{ color: "#FFFFFF" }}
+            placeholderStyle={{
+              backgroundColor: "#292929",
+              color: "#FFFFFF",
+            }}
+            style={{ backgroundColor: "#292929", borderColor: "#FE7B1D" }}
+            dropDownStyle={{
+              backgroundColor: "#292929",
+              borderColor: "#FE7B1D",
+            }}
+            arrowIconStyle={{ backgroundColor: "#FE7B1D" }}
+            items={[
+              {
+                label: "Manhã",
+                value: "2030-12-31 10:00:00.000",
+                labelStyle: { color: "#fff" },
+                selectable: true,
+              },
+              {
+                label: "Tarde",
+                value: "2030-12-31 17:00:00.000",
+                labelStyle: { color: "#fff" },
+                selectable: true,
+              },
+              {
+                label: "Noite",
+                value: "2030-12-31 22:00:00.000",
+                labelStyle: { color: "#fff" },
+                selectable: true,
+              },
+            ]}
+          />
+          <TouchableOpacity style={styles.btn_criar} onPress={updateReminder}>
+            <Text
+              style={{
+                fontFamily: "Regular",
+                fontSize: 16,
+                color: "#FFFFFF",
+              }}
+            >
+              Atualizar
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
       {isShow && (
         <View style={styles.container_dados1}>
           <TouchableOpacity
@@ -287,16 +483,38 @@ export default function Resumo() {
         </View>
       )}
       {!isShow && (
-        <View style={styles.container_not}>
+        <View>
           {listReminder.map((item) => {
             return (
-              <View key={item.idLembrete}>
-                <Text style={styles.hora}>
-                  {moment(item.horario).format("LT")}
-                </Text>
-              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  openUpdateModal(item.idLembrete);
+                }}
+                key={item.idLembrete}
+              >
+                <View style={styles.container_not}>
+                  <View>
+                    <Text style={styles.hora}>
+                      {moment(item.horario).format("LT")}
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
             );
           })}
+
+          <View style={styles.container_resposta}>
+            <TouchableOpacity onPress={createTrueResponse}>
+              <View style={styles.btn_resposta}>
+                <AntDesign name="check" size={28} color="#FC791C" />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={createFalseResponse}>
+              <View style={styles.btn_resposta}>
+                <AntDesign name="close" size={28} color="#FC791C" />
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
     </View>
@@ -404,6 +622,29 @@ const styles = StyleSheet.create({
     fontFamily: "Regular",
     textAlign: "center",
     textAlignVertical: "center",
+  },
+
+  container_resposta: {
+    display: "flex",
+    flexDirection: "row",
+    width: 270,
+    alignSelf: "center",
+    justifyContent: "space-between",
+  },
+
+  btn_resposta: {
+    color: "#FFFF",
+    borderColor: "#FC791C",
+    width: 120,
+    height: 60,
+    marginTop: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    backgroundColor: "transparent",
+    borderWidth: 2,
+    borderRadius: 20,
   },
 
   nome1: {
