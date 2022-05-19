@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { render } from "react-dom";
 import moment from "moment";
+import * as Notifications from 'expo-notifications';
 import "moment/locale/pt-br";
 import DropDownPicker from "react-native-dropdown-picker";
 import {
@@ -14,6 +15,11 @@ import {
   Button,
   Platform,
 } from "react-native";
+import React, {
+  useState,
+  useEffect,
+  useRef
+} from 'react';
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
@@ -41,19 +47,42 @@ import {
   Poppins_900Black,
   Poppins_900Black_Italic,
 } from "@expo-google-fonts/poppins";
-import { useState, useEffect } from "react";
 import { set, setWith } from "lodash";
 import api from "../services/api";
 
 moment.locale("pt-br");
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 export default function Resumo() {
-  const [listReminder, setListReminder] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [nome, setNome] = useState("");
-  const [date, setDate] = useState("");
-  const [visible, SetVisible] = useState(false);
-  const [isShow, setIsShow] = useState(true);
+
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
 
   useEffect(() => {
     let onProgress = true;
@@ -76,16 +105,24 @@ export default function Resumo() {
       setIsShow(false);
       console.warn(isShow)
     }
-      
+
     return () => {
       onProgress = false;
     };
   }, []);
-  
+
+  const [listReminder, setListReminder] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [nome, setNome] = useState("");
+  const [date, setDate] = useState("");
+  const [visible, SetVisible] = useState(false);
+  const [isShow, setIsShow] = useState(true);
+
+
 
   const route = useRoute();
 
-  const { id } = route.params;
+  const id = route.params;
 
   const closeModal = async () => {
     setDate("");
@@ -94,7 +131,7 @@ export default function Resumo() {
     setOpen(false);
   };
 
-  const changeShow = async() =>{
+  const changeShow = async () => {
     setIsShow(!isShow);
   }
 
@@ -161,6 +198,8 @@ export default function Resumo() {
   function home() {
     navigation.navigate("Home");
   }
+
+
   return (
     <View style={styles.background}>
       <View style={styles.header}>
@@ -257,14 +296,10 @@ export default function Resumo() {
             value={nome}
             onChangeText={(nome) => setNome(nome)}
           ></TextInput>
-          <TouchableOpacity style={styles.btn_criar} onPress={createReminder}>
-            <Text
-              style={{
-                fontFamily: "Regular",
-                fontSize: 16,
-                color: "#FFFFFF",
-              }}
-            >
+          <TouchableOpacity style={styles.btn_criar} onPress={createReminder} onPressIn={async () => {
+          await interativePushNotification();
+        }}>
+            <Text style={{fontFamily: "Regular", fontSize: 16, color: "#FFFFFF",}}>
               Criar
             </Text>
           </TouchableOpacity>
@@ -301,6 +336,61 @@ export default function Resumo() {
       )}
     </View>
   );
+}
+
+async function interativePushNotification() {
+
+  await Notifications.setNotificationCategoryAsync('teste', [
+    {
+      buttonTitle: "CLICA AQUI KRL",
+    }
+  ]
+  ),
+
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        categoryIdentifier: "teste",
+
+        title: "Ei você! 📬",
+        body: 'Você ja treinou Hoje?',
+        // data: { data: 'goes here' },
+      },
+      trigger: {
+        minute: 36,
+        repeats: true,
+      },
+    });
+}
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  if (Constants.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+
+  return token;
 }
 
 const styles = StyleSheet.create({
@@ -464,3 +554,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+

@@ -20,7 +20,7 @@ export default function Stack() {
       />
 
       <AuthStack.Navigator
-        initialRouteName="Login"
+        initialRouteName="Lembretes"
         screenOptions={{
           headerShown: false,
         }}>
