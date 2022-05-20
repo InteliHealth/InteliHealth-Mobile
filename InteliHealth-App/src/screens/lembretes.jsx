@@ -51,6 +51,7 @@ moment.locale("pt-br");
 export default function Resumo() {
   const [listReminder, setListReminder] = useState([]);
   const [listResponse, setListResponse] = useState([]);
+  const [chartData, setChartData] = useState([]);
   const [open, setOpen] = useState(false);
   const [nome, setNome] = useState("");
   const [date, setDate] = useState("");
@@ -91,8 +92,9 @@ export default function Resumo() {
   }, []);
 
   useEffect(() => {
+    console.log('lista de respostas');
     console.log(filterByWeek(listResponse));
-  }, []);
+  }, [listResponse]);
 
   const route = useRoute();
 
@@ -115,6 +117,7 @@ export default function Resumo() {
   const openUpdateModal = (id) => {
     setUpdateVisibility(true);
     setNotId(id);
+    console.log("not")
     console.log(notId);
   };
 
@@ -123,6 +126,9 @@ export default function Resumo() {
       .post("/Respostas", {
         idTopico: id,
         realizado: true,
+      })
+      .then(() =>{
+        listResponses()
       })
       .catch((error) => {
         console.log(error);
@@ -134,6 +140,9 @@ export default function Resumo() {
       .post("/Respostas", {
         idTopico: id,
         realizado: false,
+      })
+      .then(() =>{
+        listResponses()
       })
       .catch((error) => {
         console.log(error);
@@ -194,7 +203,7 @@ export default function Resumo() {
   }
 
   const listResponses = () => {
-    api("/Respostas/Meus/" + id)
+    api("/Respostas/Meus/Realizados/" + id)
       .then((response) => {
         setListResponse(response.data);
       })
@@ -240,24 +249,6 @@ export default function Resumo() {
       return (moment(response.dataCriacao) > lastYear()) && (moment(response.dataCriacao) < nextDay());
     })
   }
-
-  // const filterByWeek = () => {
-  //   const today = new Date();
-  //   const startDay = moment(today).subtract(6, "days").format("LLLL");
-  //   const lastDay = moment(today).add(2, "days").format("LLLL");
-
-  //   return listResponse.filter((response) => (response.dataCriacao < lastDay));
-
-  //   // return listResponse.filter((response) => {
-  //   //   const launchDate = response.dataCriacao;
-  //   //   // console.warn(launchDate)
-  //   //   // return launchDate >= startDay && launchDate <= lastDay;
-  //   //   // return launchDate > startDay && launchDate < lastDay;
-
-  //   //   // return response.dataCriacao > startDay || response.dataCriacao <= lastDay;
-  //   //   // return moment(launchDate).isBetween(startDay, lastDay)
-  //   // });
-  // };
 
   const navigation = useNavigation();
 

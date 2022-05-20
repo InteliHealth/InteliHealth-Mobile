@@ -38,7 +38,8 @@
     "react-native-safe-area-context": "3.3.2",
     "react-native-svg": "12.1.1",
     "react-native-vector-icon-picker": "^0.1.0",
-    "react-native-web": "0.17.1"
+    "react-native-web": "0.17.1",
+    "victory-native": "^36.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
