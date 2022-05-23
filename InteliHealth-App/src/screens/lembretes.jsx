@@ -1,5 +1,4 @@
 import { StatusBar } from "expo-status-bar";
-import { render } from "react-dom";
 import moment from "moment";
 import "moment/locale/pt-br";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -11,8 +10,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  Button,
-  Platform,
+  ScrollView,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -20,7 +18,6 @@ import { useFonts } from "expo-font";
 import Modal from "react-native-modal";
 import AppLoading from "expo-app-loading";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import {
   Poppins_100Thin,
   Poppins_100Thin_Italic,
@@ -42,9 +39,14 @@ import {
   Poppins_900Black_Italic,
 } from "@expo-google-fonts/poppins";
 import { useState, useEffect } from "react";
-import { set, setWith } from "lodash";
 import { AntDesign } from "@expo/vector-icons";
 import api from "../services/api";
+import {
+  VictoryBar,
+  VictoryTheme,
+  VictoryChart,
+  VictoryArea,
+} from "victory-native";
 
 moment.locale("pt-br");
 
@@ -60,6 +62,13 @@ export default function Resumo() {
   const [updateOpen, setUpdateOpen] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const [notId, setNotId] = useState();
+
+  const data = [
+    { year: "2011", earnings: 13000 },
+    { year: "2012", earnings: 16500 },
+    { year: "2013", earnings: 14250 },
+    { year: "2014", earnings: 19000 },
+  ];
 
   useEffect(() => {
     let onProgress = true;
@@ -92,8 +101,8 @@ export default function Resumo() {
   }, []);
 
   useEffect(() => {
-    console.log('lista de respostas');
-    console.log(filterByWeek(listResponse));
+    setChartData(filterByWeek(listResponse));
+    console.log(chartData);
   }, [listResponse]);
 
   const route = useRoute();
@@ -117,7 +126,7 @@ export default function Resumo() {
   const openUpdateModal = (id) => {
     setUpdateVisibility(true);
     setNotId(id);
-    console.log("not")
+    console.log("not");
     console.log(notId);
   };
 
@@ -127,8 +136,8 @@ export default function Resumo() {
         idTopico: id,
         realizado: true,
       })
-      .then(() =>{
-        listResponses()
+      .then(() => {
+        listResponses();
       })
       .catch((error) => {
         console.log(error);
@@ -139,10 +148,10 @@ export default function Resumo() {
     api
       .post("/Respostas", {
         idTopico: id,
-        realizado: false,
+        realizado: 0,
       })
-      .then(() =>{
-        listResponses()
+      .then(() => {
+        listResponses();
       })
       .catch((error) => {
         console.log(error);
@@ -203,7 +212,7 @@ export default function Resumo() {
   }
 
   const listResponses = () => {
-    api("/Respostas/Meus/Realizados/" + id)
+    api("/Respostas/Meus/" + id)
       .then((response) => {
         setListResponse(response.data);
       })
@@ -215,40 +224,49 @@ export default function Resumo() {
   const lastWeek = () => {
     var result = moment().subtract(6, "days").hours(0);
     return result;
-  }
+  };
 
   const nextDay = () => {
     var result = moment().add(1, "days").hours(0);
     return result;
-  }
+  };
 
   const lastMonth = () => {
     var result = moment().subtract(29, "days").hours(0);
     return result;
-  }
+  };
 
   const lastYear = () => {
     var result = moment().subtract(364, "days").hours(0);
     return result;
-  }
+  };
 
   const filterByWeek = (listResponse) => {
     return listResponse.filter((response) => {
-      return (moment(response.dataCriacao) > lastWeek()) && (moment(response.dataCriacao) < nextDay());
+      return (
+        moment(response.dataCriacao) > lastWeek() &&
+        moment(response.dataCriacao) < nextDay()
+      );
     });
-  }
+  };
 
   const filterByMonth = (listResponse) => {
     return listResponse.filter((response) => {
-      return (moment(response.dataCriacao) > lastMonth()) && (moment(response.dataCriacao) < nextDay());
-    })
-  }
+      return (
+        moment(response.dataCriacao) > lastMonth() &&
+        moment(response.dataCriacao) < nextDay()
+      );
+    });
+  };
 
   const filterByYear = (listResponse) => {
     return listResponse.filter((response) => {
-      return (moment(response.dataCriacao) > lastYear()) && (moment(response.dataCriacao) < nextDay());
-    })
-  }
+      return (
+        moment(response.dataCriacao) > lastYear() &&
+        moment(response.dataCriacao) < nextDay()
+      );
+    });
+  };
 
   const navigation = useNavigation();
 
@@ -280,7 +298,7 @@ export default function Resumo() {
     navigation.navigate("Home");
   }
   return (
-    <View style={styles.background}>
+    <ScrollView style={styles.background}>
       <View style={styles.header}>
         <Image
           onPress={home}
@@ -508,7 +526,44 @@ export default function Resumo() {
           </View>
         </View>
       )}
-    </View>
+      <View style={{ width: "100%", alignItems: "center" }}>
+        <VictoryChart width={360} theme={VictoryTheme.material}>
+          <VictoryArea
+            interpolation="basis"
+            style={{
+              data: { fill: "#b5540e", stroke: "#000", strokeWidth: 2 },
+              parent: { border: "1px solid #000" },
+              labels: { color: "#000" },
+            }}
+            data={chartData}
+            animate={{
+              duration: 2000,
+              onLoad: { duration: 1000 },
+            }}
+            y="realizado"
+          />
+        </VictoryChart>
+      </View>
+      <View>
+        <View style={styles.container_filtro}>
+          <TouchableOpacity onPress={() => setChartData(filterByWeek(listResponse))}>
+            <View style={styles.btn_filtro}>
+              <Text style={styles.txt_filtro}>Semanal</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setChartData(filterByMonth(listResponse))}>
+            <View style={styles.btn_filtro}>
+              <Text style={styles.txt_filtro}>Mensal</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setChartData(filterByYear(listResponse))}>
+            <View style={styles.btn_filtro}>
+              <Text style={styles.txt_filtro}>Anual</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
@@ -592,7 +647,7 @@ const styles = StyleSheet.create({
   container_not: {
     color: "#FFFF",
     borderColor: "#FC791C",
-    width: 270,
+    width: 280,
     height: 70,
     marginTop: 40,
     flexDirection: "row",
@@ -618,15 +673,16 @@ const styles = StyleSheet.create({
   container_resposta: {
     display: "flex",
     flexDirection: "row",
-    width: 270,
+    width: 280,
     alignSelf: "center",
     justifyContent: "space-between",
   },
 
+  
   btn_resposta: {
     color: "#FFFF",
     borderColor: "#FC791C",
-    width: 120,
+    width: 125,
     height: 60,
     marginTop: 20,
     flexDirection: "row",
@@ -638,6 +694,34 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 
+  container_filtro: {
+    display: "flex",
+    flexDirection: "row",
+    width: 280,
+    alignSelf: "center",
+    justifyContent: "space-between",
+    marginBottom: 30,
+  },
+
+  btn_filtro: {
+    color: "#FFFF",
+    borderColor: "#FC791C",
+    width: 80,
+    height: 60,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    backgroundColor: "transparent",
+    borderWidth: 2,
+    borderRadius: 20,
+  },
+
+  txt_filtro: {
+    color: "#fff",
+    fontFamily: "Regular",
+  },
+  
   nome1: {
     color: "#FC791C",
   },
