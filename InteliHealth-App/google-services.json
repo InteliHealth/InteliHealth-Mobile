@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "819765853091",
+    "project_id": "intelimessage",
+    "storage_bucket": "intelimessage.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819765853091:android:4e2131eb5a6f1d5aa2f816",
+        "android_client_info": {
+          "package_name": "com.intelih.intelihealth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "819765853091-8n2pf88n3600jef5svp57dttq3ha916d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgGulkg6bdFxUKxEW6qyujvYhYOh0fWec"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "819765853091-8n2pf88n3600jef5svp57dttq3ha916d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

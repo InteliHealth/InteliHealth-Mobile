@@ -24,6 +24,7 @@
     },
     "android": {
       "package": "com.intelih.intelihealth",
+      "googleServicesFile": "./google-services.json",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
