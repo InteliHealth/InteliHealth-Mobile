@@ -99,14 +99,9 @@ export default function Perfil() {
   }
 
   return (
-    <ScrollView style={styles.background}>
-      <View style={styles.background}>
-        <View style={styles.header}>
-          <Image
-            source={require("../../assets/logo-pessoa-menor.png")}
-            style={styles.logo_header}
-          />
-        </View>
+    <View style={styles.background}>
+      <View>
+        <View style={styles.header}></View>
         <View style={styles.container}>
           <TouchableOpacity
             onPress={home}
@@ -116,15 +111,6 @@ export default function Perfil() {
             <Image
               source={require("../../assets/seta.png")}
               style={styles.seta}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.buttonCompartilharStyle}
-            activeOpacity={0.5}
-          >
-            <Image
-              source={require("../../assets/Compartilhar.png")}
-              style={styles.compartilhar}
             />
           </TouchableOpacity>
         </View>
@@ -143,37 +129,6 @@ export default function Perfil() {
             <Text style={styles.email}>{email}</Text>
           </View>
         </View>
-        {/* <View style={styles.container_dados1}>
-            <TextInput style={styles.campo} placeholder={'Altura'} placeholderTextColor={'white'}>
-            </TextInput>
-            <TouchableOpacity>
-              <Image
-                source={require("../../assets/lapis.png")}
-                style={styles.lapis}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.container_dados1}>
-            <TextInput style={styles.campo} placeholder={'Peso'} placeholderTextColor={'white'} >
-            </TextInput>
-            <TouchableOpacity>
-              <Image
-                source={require("../../assets/lapis.png")}
-                style={styles.lapis}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.container_dados}>
-            <TextInput style={styles.campo} placeholder={'Tipo Sanguíneo'} placeholderTextColor={'white'}>
-            </TextInput>
-            <TouchableOpacity>
-              <Image
-                source={require("../../assets/lapis.png")}
-                style={styles.lapis}
-              />
-            </TouchableOpacity>
-          </View> */}
-
         <TouchableOpacity style={styles.btnLogin} onPress={logOut}>
           <Text
             style={{
@@ -185,14 +140,15 @@ export default function Perfil() {
             Sair
           </Text>
         </TouchableOpacity>
-        {/* <View style={styles.container_detalhe}> */}
-        <Image
-          source={require("../../assets/detalhe.png")}
-          style={styles.logo_detalhe}
-        />
-        {/* </View> */}
+        {/* <View style={styles.container_detalhe}>
+          <Image
+            source={require("../../assets/detalhe.png")}
+            style={styles.logo_detalhe}
+          />
+        </View> */}
       </View>
-    </ScrollView>
+      <StatusBar style="light" backgroundColor="#000"/>
+    </View>
   );
 }
 
@@ -201,6 +157,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#393939",
     width: "100%",
+    marginTop: 20,
     // height: 48,
   },
 
@@ -211,9 +168,8 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    backgroundColor: "#000",
     width: "100%",
-    height: 50,
+    height: 30,
   },
 
   head: {
@@ -265,7 +221,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 0,
     // border: 1px solid #FC791C;
   },
 
@@ -303,7 +259,7 @@ const styles = StyleSheet.create({
     borderColor: "#FC791C",
     borderWidth: 1,
     width: 250,
-    marginTop: 10,
+    marginTop: 20,
     borderRadius: 10,
     height: 50,
     alignItems: "center",
@@ -333,23 +289,23 @@ const styles = StyleSheet.create({
     width: 130,
     backgroundColor: "transparent",
     borderColor: "#FC7B20",
+    alignSelf: "center",
     borderWidth: 1,
     borderRadius: 50,
     shadowOffset: { height: 1, width: 1 },
-    marginLeft: 120,
   },
 
-  // containter_detalhe: {
-  //     alignSelf: 'flex-end',
-  //     justifyContent: 'flex-end',
-  //     alignItems: 'baseline',
-  // },
+  containter_detalhe: {
+    marginTop: 30,
+  },
 
   logo_detalhe: {
-    width: 300,
-    height: 100,
     justifyContent: "flex-end",
-    marginTop: 25,
+    alignItems: "flex-end",
+    // marginTop: 180,
+    // alignContent: "center",
+    width: 360,
+    height: 120,
     alignSelf: "center",
   },
 });

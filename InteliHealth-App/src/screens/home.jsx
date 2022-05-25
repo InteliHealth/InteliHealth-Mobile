@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import DropDownPicker from "react-native-dropdown-picker";
-import Svg, { SvgUri } from "react-native-svg";
+import * as Device from 'expo-device'
 import {
   StyleSheet,
   Text,
@@ -160,6 +160,7 @@ export function Home() {
 
   return (
     <ScrollView style={styles.main}>
+      <View style={styles.header_margin}/>
       <View style={styles.container}>
         <View style={styles.header}>
           <Image
@@ -446,6 +447,7 @@ export function Home() {
           <Ionicons name="add" size={55} color="#FE7B1D" />
         </TouchableOpacity>
       </View>
+      <StatusBar style="light" backgroundColor="#000"/>
     </ScrollView>
   );
 }
@@ -454,6 +456,10 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     backgroundColor: "#3F3F3F",
+  },
+  header_margin: {
+    width: "100%",
+    height: 30,
   },
   container: {
     alignItems: "center",

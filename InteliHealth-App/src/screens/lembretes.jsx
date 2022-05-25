@@ -1,5 +1,8 @@
 import { StatusBar } from "expo-status-bar";
+import chartTheme from "./theme/chartTheme";
 import moment from "moment";
+import * as Notifications from "expo-notifications";
+import * as Device from "expo-device";
 import "moment/locale/pt-br";
 import DropDownPicker from "react-native-dropdown-picker";
 import {
@@ -11,6 +14,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  Platform,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -38,7 +42,7 @@ import {
   Poppins_900Black,
   Poppins_900Black_Italic,
 } from "@expo-google-fonts/poppins";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import api from "../services/api";
 import {
@@ -50,6 +54,14 @@ import {
 
 moment.locale("pt-br");
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 export default function Resumo() {
   const [listReminder, setListReminder] = useState([]);
   const [listResponse, setListResponse] = useState([]);
@@ -60,14 +72,17 @@ export default function Resumo() {
   const [visible, SetVisible] = useState(false);
   const [updateVisibility, setUpdateVisibility] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
-  const [isShow, setIsShow] = useState(false);
+  const [isShow, setIsShow] = useState(true);
   const [notId, setNotId] = useState();
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   const data = [
     { year: "2011", earnings: 13000 },
     { year: "2012", earnings: 16500 },
     { year: "2013", earnings: 14250 },
-    { year: "2014", earnings: 19000 },
   ];
 
   useEffect(() => {
@@ -76,6 +91,25 @@ export default function Resumo() {
     listReminders();
     return () => {
       onProgress = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) =>
+      setExpoPushToken(token)
+    );
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener);
+      Notifications.removeNotificationSubscription(responseListener);
     };
   }, []);
 
@@ -90,7 +124,7 @@ export default function Resumo() {
     return () => {
       onProgress = false;
     };
-  }, []);
+  }, [listReminder]);
 
   useEffect(() => {
     let onProgress = true;
@@ -299,14 +333,7 @@ export default function Resumo() {
   }
   return (
     <ScrollView style={styles.background}>
-      <View style={styles.header}>
-        <Image
-          onPress={home}
-          source={require("../../assets/logo-pessoa-menor.png")}
-          style={styles.logo_header}
-        />
-      </View>
-
+      <View style={styles.header}/>
       <View>
         <TouchableOpacity
           onPress={home}
@@ -393,7 +420,13 @@ export default function Resumo() {
             value={nome}
             onChangeText={(nome) => setNome(nome)}
           ></TextInput>
-          <TouchableOpacity style={styles.btn_criar} onPress={createReminder}>
+          <TouchableOpacity
+            style={styles.btn_criar}
+            onPress={createReminder}
+            onPressIn={async () => {
+              await interativePushNotification();
+            }}
+          >
             <Text
               style={{
                 fontFamily: "Regular",
@@ -475,7 +508,7 @@ export default function Resumo() {
           </TouchableOpacity>
         </View>
       </Modal>
-      {isShow && (
+      {isShow ? (
         <View style={styles.container_dados1}>
           <TouchableOpacity
             onPress={() => {
@@ -490,8 +523,7 @@ export default function Resumo() {
             />
           </TouchableOpacity>
         </View>
-      )}
-      {!isShow && (
+      ) : (
         <View>
           {listReminder.map((item) => {
             return (
@@ -524,47 +556,110 @@ export default function Resumo() {
               </View>
             </TouchableOpacity>
           </View>
+          <View style={{ width: "100%", alignItems: "center" }}>
+            <VictoryChart width={360} theme={VictoryTheme.material}>
+              <VictoryArea
+                interpolation="basis"
+                style={{
+                  data: {
+                    fill: "#b5540e",
+                    stroke: "#000",
+                    strokeWidth: 2,
+                    fontStyle: "bold",
+                  },
+                  parent: { border: "1px solid #000" },
+                  labels: { fontSize: 10, color: "#000" },
+                }}
+                data={chartData}
+                animate={{
+                  duration: 1000,
+                  onLoad: { duration: 500 },
+                }}
+                y="realizado"
+              />
+            </VictoryChart>
+          </View>
+          <View>
+            <View style={styles.container_filtro}>
+              <TouchableOpacity
+                onPress={() => setChartData(filterByWeek(listResponse))}
+              >
+                <View style={styles.btn_filtro}>
+                  <Text style={styles.txt_filtro}>Semanal</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setChartData(filterByMonth(listResponse))}
+              >
+                <View style={styles.btn_filtro}>
+                  <Text style={styles.txt_filtro}>Mensal</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setChartData(filterByYear(listResponse))}
+              >
+                <View style={styles.btn_filtro}>
+                  <Text style={styles.txt_filtro}>Anual</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       )}
-      <View style={{ width: "100%", alignItems: "center" }}>
-        <VictoryChart width={360} theme={VictoryTheme.material}>
-          <VictoryArea
-            interpolation="basis"
-            style={{
-              data: { fill: "#b5540e", stroke: "#000", strokeWidth: 2 },
-              parent: { border: "1px solid #000" },
-              labels: { color: "#000" },
-            }}
-            data={chartData}
-            animate={{
-              duration: 2000,
-              onLoad: { duration: 1000 },
-            }}
-            y="realizado"
-          />
-        </VictoryChart>
-      </View>
-      <View>
-        <View style={styles.container_filtro}>
-          <TouchableOpacity onPress={() => setChartData(filterByWeek(listResponse))}>
-            <View style={styles.btn_filtro}>
-              <Text style={styles.txt_filtro}>Semanal</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setChartData(filterByMonth(listResponse))}>
-            <View style={styles.btn_filtro}>
-              <Text style={styles.txt_filtro}>Mensal</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => setChartData(filterByYear(listResponse))}>
-            <View style={styles.btn_filtro}>
-              <Text style={styles.txt_filtro}>Anual</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <StatusBar style="light" backgroundColor="#000"/>
     </ScrollView>
   );
+}
+
+async function interativePushNotification() {
+  await Notifications.setNotificationCategoryAsync("teste", [
+    {
+      buttonTitle: "CLICA AQUI KRL",
+    },
+  ]),
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        categoryIdentifier: "teste",
+        title: "Ei você! 📬",
+        body: "Você ja treinou Hoje?",
+      },
+      trigger: {
+        hour: 16,
+        minute: 25,
+        repeats: true,
+      },
+    });
+}
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  if (Device.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    console.log(token);
+  } else {
+    alert("Não é um dispositivo!");
+  }
+  if (Platform.OS === "android") {
+    Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  return token;
 }
 
 const styles = StyleSheet.create({
@@ -573,6 +668,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#3F3F3F",
     width: "100%",
     height: 48,
+    marginTop: 25,
   },
 
   logo_header: {
@@ -582,9 +678,8 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    backgroundColor: "#000",
     width: "100%",
-    height: 50,
+    height: 30,
   },
 
   head: {
@@ -678,7 +773,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 
-  
   btn_resposta: {
     color: "#FFFF",
     borderColor: "#FC791C",
@@ -721,7 +815,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "Regular",
   },
-  
+
   nome1: {
     color: "#FC791C",
   },

@@ -15,9 +15,7 @@ import Lembretes from './src/screens/lembretes';
 export default function Stack() {
   return (
     <NavigationContainer>
-      <StatusBar
-        hidden={true}
-      />
+      <StatusBar barStyle="light-content" backgroundColor="#fff" />
 
       <AuthStack.Navigator
         initialRouteName="Login"
