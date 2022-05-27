@@ -214,7 +214,6 @@ export function Home() {
             }}
           />
         </View>
-        <View style={styles.objetivos}></View>
         <Modal
           isVisible={visible}
           swipeDirection={["right", "left"]}
@@ -377,9 +376,8 @@ export function Home() {
                 fontFamily: "Regular",
                 fontSize: 16,
                 color: "#FFFFFF",
-                width: 150,
+                width: "80%",
                 height: 170,
-                marginLeft: 20,
                 marginTop: 10,
                 borderBottomColor: "#FE7B1D",
                 borderBottomWidth: 1,
@@ -459,7 +457,7 @@ const styles = StyleSheet.create({
   },
   header_margin: {
     width: "100%",
-    height: 30,
+    height: 20,
   },
   container: {
     alignItems: "center",
@@ -484,7 +482,7 @@ const styles = StyleSheet.create({
     marginRight: 40,
   },
   banner: {
-    width: 340,
+    width: "80%",
     height: 185,
     backgroundColor: "#545454",
     borderWidth: 1,
@@ -500,13 +498,13 @@ const styles = StyleSheet.create({
     flexWrap: "wrap"
   },
   objetivos: {
-    width: 300,
-    marginTop: 10,
+    marginTop: "7%",
     marginBottom: 10,
     flexDirection: "row",
     justifyContent: "space-evenly",
-    maxWidth: 340,
+    maxWidth: "70%",
     flexWrap: "wrap",
+    
   },
   card: {
     backgroundColor: "#393939",
@@ -514,13 +512,16 @@ const styles = StyleSheet.create({
     borderColor: "#FE7B1D",
     width: 90,
     height: 90,
+    marginTop: "5%",
     borderRadius: 13,
+    marginLeft: "5%",
     alignItems: "center",
     justifyContent: "center",
     elevation: 10,
   },
   add: {
-    marginLeft: 300,
+    marginLeft: "80%",
+    marginTop: "20%",
     backgroundColor: "#393939",
     // borderWidth: 1,
     // borderColor: '#FE7B1D',
@@ -536,8 +537,8 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   cadastro: {
-    width: 260,
-    height: 320,
+    width: "65%",
+    height: "40%",
     backgroundColor: "#292929",
     borderRadius: 20,
     justifyContent: "space-evenly",
@@ -545,8 +546,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   btn_criar: {
-    height: 45,
-    width: 120,
+    height: "12.5%",
+    width: "60%",
     backgroundColor: "transparent",
     borderColor: "#FC7B20",
     borderWidth: 1,
