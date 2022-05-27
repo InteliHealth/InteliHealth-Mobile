@@ -57,12 +57,6 @@ export function Login() {
 
   let navigation = useNavigation();
 
-  useEffect(() => {
-    if (getLogedUser !== null) {
-      navigation.navigate("Home");
-    }
-  }, []);
-
   let [fontsLoaded] = useFonts({
     Poppins_100Thin,
     Poppins_100Thin_Italic,
