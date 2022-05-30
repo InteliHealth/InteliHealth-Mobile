@@ -209,6 +209,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 30,
+    maxWidth: "50%",
+    maxHeight: "50%",
+    alignSelf: "center",
   },
 
   logo_pessoa: {
@@ -241,7 +244,7 @@ const styles = StyleSheet.create({
 
   nome: {
     color: "#ffffff",
-    width: 223,
+    width: "100%",
     textAlign: "center",
     fontFamily: "Regular",
     fontSize: 16,
@@ -258,10 +261,10 @@ const styles = StyleSheet.create({
   info: {
     borderColor: "#FC791C",
     borderWidth: 1,
-    width: 250,
-    marginTop: 20,
+    width: "70%",
+    marginTop: "5%",
     borderRadius: 10,
-    height: 50,
+    height: 60,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -281,12 +284,12 @@ const styles = StyleSheet.create({
   },
 
   btnLogin: {
-    marginTop: 60,
+    marginTop: "20%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    height: 50,
-    width: 130,
+    width: "40%",
+    height: "10%",
     backgroundColor: "transparent",
     borderColor: "#FC7B20",
     alignSelf: "center",

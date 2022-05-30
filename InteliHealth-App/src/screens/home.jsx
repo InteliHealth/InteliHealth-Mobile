@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import DropDownPicker from "react-native-dropdown-picker";
-import * as Device from 'expo-device'
+import * as Device from "expo-device";
 import {
   StyleSheet,
   Text,
@@ -53,9 +53,8 @@ export function Home() {
   const [icone, setIcone] = useState("");
   const [listaTopico, setListaTopico] = useState([]);
   const [visible, SetVisible] = useState(false);
-  const [loadingImg, setLoadingImg] = useState(
-    "https://raw.githubusercontent.com/InteliHealth/InteliHealth-Images/1d98cf8e13ce334a6d72bdf18ab19d9ab3a54eb9/Loading/loading-svgrepo-com.svg"
-  );
+  const [deleteVisible, setDeleteVisible] = useState(false);
+  const [deleteId, setDeleteId] = useState(0);
 
   useEffect(() => {
     getUser();
@@ -64,7 +63,7 @@ export function Home() {
   useEffect(() => {
     if (getLogedUser === null) {
       navigation.navigate("Home");
-    }   
+    }
   }, []);
 
   useEffect(() => {
@@ -118,6 +117,31 @@ export function Home() {
     setOpen(false);
   };
 
+  const closeDeleteModal = () => {
+    setDeleteVisible(false);
+    setDeleteId(0);
+  };
+
+  const openDeleteModal = (id) => {
+    setDeleteId(id);
+    console.log(deleteId);
+    setDeleteVisible(true);
+  }
+
+  const deleteTopic = () => {
+    api
+      .delete("/Topicos/" + deleteId)
+      .then(() => {
+        setDeleteVisible(false);
+      })
+      .then(() => {
+        listTopic();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const createTopic = async () => {
     await api
       .post("/Topicos", {
@@ -156,11 +180,11 @@ export function Home() {
 
   const handleLembrete = (id) => {
     navigation.navigate("Lembretes", { id });
-  }
+  };
 
   return (
     <ScrollView style={styles.main}>
-      <View style={styles.header_margin}/>
+      <View style={styles.header_margin} />
       <View style={styles.container}>
         <View style={styles.header}>
           <Image
@@ -252,7 +276,8 @@ export function Home() {
               items={[
                 {
                   label: "Correr",
-                  value: "https://lh3.googleusercontent.com/hDMjoOvJS3ow7Uw2qU4p2wNLYHDQ3eEr_KIjvqmklSN-ySHip4MhWo824-w9sNrGucKX3uO8mB-aBJjixfXQJiPBLXIdNjbi3KRDgQYDu16BHVMrAn3t4Fa9H25uWEf6w2hvB6vq=w2400",
+                  value:
+                    "https://lh3.googleusercontent.com/hDMjoOvJS3ow7Uw2qU4p2wNLYHDQ3eEr_KIjvqmklSN-ySHip4MhWo824-w9sNrGucKX3uO8mB-aBJjixfXQJiPBLXIdNjbi3KRDgQYDu16BHVMrAn3t4Fa9H25uWEf6w2hvB6vq=w2400",
                   icon: () => (
                     <FontAwesome5
                       name="running"
@@ -401,12 +426,53 @@ export function Home() {
             </TouchableOpacity>
           </View>
         </Modal>
+        <Modal
+          isVisible={deleteVisible}
+          swipeDirection={["right", "left"]}
+          animationIn={"fadeIn"}
+          animationInTiming={600}
+          onSwipeComplete={() => {
+            closeDeleteModal();
+          }}
+          onBackdropPress={() => {
+            closeDeleteModal();
+          }}
+        >
+          <View style={styles.delete}>
+            <Text
+              style={{
+                fontFamily: "Bold",
+                fontSize: 18,
+                color: "#FFFFFF",
+              }}
+            >
+              Excluir Objetivo?
+            </Text>
+            <TouchableOpacity style={styles.btn_delete} onPress={deleteTopic}>
+              <Text
+                style={{
+                  fontFamily: "Regular",
+                  fontSize: 16,
+                  color: "#FFFFFF",
+                }}
+              >
+                Excluir
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
         <View style={styles.objetivos}>
           {listaTopico.map((topico) => {
             return (
-              <TouchableOpacity key={topico.idTopico} onPress={() => {
-                handleLembrete(topico.idTopico);
-              }}>
+              <TouchableOpacity
+                key={topico.idTopico}
+                onLongPress={() => {
+                  openDeleteModal(topico.idTopico);
+                }}
+                onPress={() => {
+                  handleLembrete(topico.idTopico);
+                }}
+              >
                 <View style={styles.card}>
                   <Image
                     source={{
@@ -425,7 +491,7 @@ export function Home() {
                     fontSize: 16,
                     textAlign: "center",
                     color: "#FE7B1D",
-                    marginTop: 5,
+                    marginTop: 10,
                   }}
                 >
                   {topico.nome}
@@ -445,7 +511,7 @@ export function Home() {
           <Ionicons name="add" size={55} color="#FE7B1D" />
         </TouchableOpacity>
       </View>
-      <StatusBar style="light" backgroundColor="#000"/>
+      <StatusBar style="light" backgroundColor="#000" />
     </ScrollView>
   );
 }
@@ -482,7 +548,7 @@ const styles = StyleSheet.create({
     marginRight: 40,
   },
   banner: {
-    width: "80%",
+    width: "90%",
     height: 185,
     backgroundColor: "#545454",
     borderWidth: 1,
@@ -490,21 +556,22 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 50,
     flexDirection: "row",
+    justifyContent: "space-evenly",
   },
-  container_objetivos:{
+  container_objetivos: {
     width: "100%",
     maxWidth: 340,
     display: "flex",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
   },
   objetivos: {
     marginTop: "7%",
     marginBottom: 10,
     flexDirection: "row",
-    justifyContent: "space-evenly",
-    maxWidth: "70%",
+    justifyContent: "space-around",
+    maxWidth: "90%",
     flexWrap: "wrap",
-    
+    textAlign: "center",
   },
   card: {
     backgroundColor: "#393939",
@@ -514,14 +581,14 @@ const styles = StyleSheet.create({
     height: 90,
     marginTop: "5%",
     borderRadius: 13,
-    marginLeft: "5%",
     alignItems: "center",
     justifyContent: "center",
     elevation: 10,
+    marginLeft: 15,
   },
   add: {
     marginLeft: "80%",
-    marginTop: "20%",
+    marginTop: "15%",
     backgroundColor: "#393939",
     // borderWidth: 1,
     // borderColor: '#FE7B1D',
@@ -537,17 +604,38 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   cadastro: {
-    width: "65%",
-    height: "40%",
+    width: "75%",
+    height: "50%",
     backgroundColor: "#292929",
     borderRadius: 20,
     justifyContent: "space-evenly",
     alignItems: "center",
     alignSelf: "center",
   },
+  delete: {
+    width: "70%",
+    height: "35%",
+    backgroundColor: "#292929",
+    borderRadius: 20,
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    alignSelf: "center",
+    borderColor: "#FC7B20",
+    borderWidth: 0.5,
+  },
   btn_criar: {
     height: "12.5%",
-    width: "60%",
+    width: "50%",
+    backgroundColor: "transparent",
+    borderColor: "#FC7B20",
+    borderWidth: 1,
+    borderRadius: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  btn_delete: {
+    height: "13.5%",
+    width: "50%",
     backgroundColor: "transparent",
     borderColor: "#FC7B20",
     borderWidth: 1,

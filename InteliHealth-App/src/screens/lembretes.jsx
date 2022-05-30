@@ -51,6 +51,7 @@ import {
   VictoryChart,
   VictoryArea,
 } from "victory-native";
+import style from "react-native-icon-picker/src/style";
 
 moment.locale("pt-br");
 
@@ -333,7 +334,7 @@ export default function Resumo() {
   }
   return (
     <ScrollView style={styles.background}>
-      <View style={styles.header}/>
+      <View style={styles.header} />
       <View>
         <TouchableOpacity
           onPress={home}
@@ -407,9 +408,8 @@ export default function Resumo() {
               fontFamily: "Regular",
               fontSize: 16,
               color: "#FFFFFF",
-              width: 150,
+              width: "80%",
               height: 170,
-              marginLeft: 20,
               marginTop: 10,
               borderBottomColor: "#FE7B1D",
               borderBottomWidth: 1,
@@ -509,20 +509,20 @@ export default function Resumo() {
         </View>
       </Modal>
       {isShow ? (
-        <View style={styles.container_dados1}>
-          <TouchableOpacity
-            onPress={() => {
-              SetVisible(true);
-            }}
-          >
+        <TouchableOpacity
+          onPress={() => {
+            SetVisible(true);
+          }}
+        >
+          <View style={styles.container_dados1}>
             <MaterialIcons
               style={styles.nome1}
               name="add"
               size={35}
               color="black"
             />
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
       ) : (
         <View>
           {listReminder.map((item) => {
@@ -556,8 +556,8 @@ export default function Resumo() {
               </View>
             </TouchableOpacity>
           </View>
-          <View style={{ width: "100%", alignItems: "center" }}>
-            <VictoryChart width={360} theme={VictoryTheme.material}>
+          <View style={{ width: "80%", alignItems: "center", alignSelf: "center" }}>
+            <VictoryChart height={425} theme={VictoryTheme.material}>
               <VictoryArea
                 interpolation="basis"
                 style={{
@@ -606,7 +606,7 @@ export default function Resumo() {
           </View>
         </View>
       )}
-      <StatusBar style="light" backgroundColor="#000"/>
+      <StatusBar style="light" backgroundColor="#000" />
     </ScrollView>
   );
 }
@@ -727,9 +727,9 @@ const styles = StyleSheet.create({
   container_dados1: {
     color: "#FFFF",
     borderColor: "#FC791C",
-    width: 270,
+    width: "75%",
     height: 70,
-    marginTop: 40,
+    marginTop: "10%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -742,7 +742,7 @@ const styles = StyleSheet.create({
   container_not: {
     color: "#FFFF",
     borderColor: "#FC791C",
-    width: 280,
+    width: "75%",
     height: 70,
     marginTop: 40,
     flexDirection: "row",
@@ -768,17 +768,17 @@ const styles = StyleSheet.create({
   container_resposta: {
     display: "flex",
     flexDirection: "row",
-    width: 280,
+    width: "80%",
     alignSelf: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
   },
 
   btn_resposta: {
     color: "#FFFF",
     borderColor: "#FC791C",
-    width: 125,
+    width: "90%",
     height: 60,
-    marginTop: 20,
+    marginTop: "10%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -791,16 +791,16 @@ const styles = StyleSheet.create({
   container_filtro: {
     display: "flex",
     flexDirection: "row",
-    width: 280,
+    width: "70%",
     alignSelf: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
     marginBottom: 30,
   },
 
   btn_filtro: {
     color: "#FFFF",
     borderColor: "#FC791C",
-    width: 80,
+    width: "65%",
     height: 60,
     flexDirection: "row",
     alignItems: "center",
@@ -855,8 +855,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   cadastro: {
-    width: 260,
-    height: 320,
+    width: "75%",
+    height: "50%",
     backgroundColor: "#292929",
     borderRadius: 20,
     justifyContent: "space-evenly",
@@ -864,8 +864,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   btn_criar: {
-    height: 45,
-    width: 120,
+    height: "12.5%",
+    width: "50%",
     backgroundColor: "transparent",
     borderColor: "#FC7B20",
     borderWidth: 1,
@@ -873,4 +873,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  chart:{
+    width: "80%",
+    height: "50%",
+  }
 });

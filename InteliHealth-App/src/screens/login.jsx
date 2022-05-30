@@ -179,8 +179,8 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
   },
   mainImgLogin: {
-    height: 250, //altura
-    width: 250, //largura img nao é quadrada
+    height: "50%", //altura
+    width: "60%", //largura img nao é quadrada
     marginTop: 50, // tira espacamento pra cima
     //marginLeft: 90, //tira espacamento pra cima
   },
@@ -191,12 +191,12 @@ const styles = StyleSheet.create({
     textTransform: "uppercase", //estilo maiusculo
   },
   btnLogin: {
-    marginTop: 150,
+    marginTop: "25%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    height: 65,
-    width: 270,
+    height: "8%",
+    width: "75%",
     backgroundColor: "transparent",
     borderColor: "#FC7B20",
     borderWidth: 1,
