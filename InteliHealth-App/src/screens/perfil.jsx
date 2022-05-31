@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { render } from "react-dom";
+import  {  RFPercentage   }  from  "react-native-responsive-fontsize" ;
 import {
   StyleSheet,
   Text,
@@ -133,7 +133,7 @@ export default function Perfil() {
           <Text
             style={{
               fontFamily: "Regular",
-              fontSize: 18,
+              fontSize: RFPercentage(2.5),
               color: "#FFFFFF",
             }}
           >
@@ -247,15 +247,15 @@ const styles = StyleSheet.create({
     width: "100%",
     textAlign: "center",
     fontFamily: "Regular",
-    fontSize: 16,
+    fontSize: RFPercentage(2),
     alignItems: "center",
   },
   email: {
     color: "#ffffff",
-    width: 223,
+    width: "100%",
     textAlign: "center",
     fontFamily: "Regular",
-    fontSize: 14,
+    fontSize: RFPercentage(2),
     alignItems: "center",
   },
   info: {
@@ -267,6 +267,7 @@ const styles = StyleSheet.create({
     height: 60,
     alignItems: "center",
     justifyContent: "center",
+    textAlignVertical: "center",
   },
 
   campo: {
@@ -289,7 +290,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "40%",
-    height: "10%",
+    height: "8.5%",
     backgroundColor: "transparent",
     borderColor: "#FC7B20",
     alignSelf: "center",

@@ -6,8 +6,7 @@ import axios from "axios";
 import api from "../services/api";
 import * as WebBrowser from "expo-web-browser";
 import { useNavigation } from "@react-navigation/native";
-import Constants from 'expo-constants';
-import * as Notifications from 'expo-notifications';
+import  {  RFPercentage   }  from  "react-native-responsive-fontsize" ;
 
 import {
   StyleSheet,
@@ -149,7 +148,7 @@ export function Login() {
             <Text
               style={{
                 fontFamily: "Regular",
-                fontSize: 18,
+                fontSize: RFPercentage(2.5),
                 color: "#FFFFFF",
               }}
             >
@@ -204,8 +203,8 @@ const styles = StyleSheet.create({
     shadowOffset: { height: 1, width: 1 },
   },
   ImageButton: {
-    height: 30,
-    width: 30,
+    height: '60%',
+    width: '10%',
     marginLeft: 10,
   },
   arvore: {

@@ -52,6 +52,7 @@ import {
   VictoryArea,
 } from "victory-native";
 import style from "react-native-icon-picker/src/style";
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 moment.locale("pt-br");
 
@@ -406,7 +407,7 @@ export default function Resumo() {
           <TextInput
             style={{
               fontFamily: "Regular",
-              fontSize: 16,
+              fontSize:18,
               color: "#FFFFFF",
               width: "80%",
               height: 170,
@@ -430,7 +431,7 @@ export default function Resumo() {
             <Text
               style={{
                 fontFamily: "Regular",
-                fontSize: 16,
+                fontSize: RFPercentage(2),
                 color: "#FFFFFF",
               }}
             >
@@ -499,7 +500,7 @@ export default function Resumo() {
             <Text
               style={{
                 fontFamily: "Regular",
-                fontSize: 16,
+                fontSize: RFPercentage(2),
                 color: "#FFFFFF",
               }}
             >
@@ -621,11 +622,11 @@ async function interativePushNotification() {
       content: {
         categoryIdentifier: "teste",
         title: "Ei você! 📬",
-        body: "Você ja treinou Hoje?",
+        body: "Já realizou sua atividade?",
       },
       trigger: {
-        hour: 16,
-        minute: 25,
+        hour: 15,
+        minute: 35,
         repeats: true,
       },
     });
@@ -759,7 +760,7 @@ const styles = StyleSheet.create({
 
   hora: {
     color: "#FC791C",
-    fontSize: 20,
+    fontSize: 25,
     fontFamily: "Regular",
     textAlign: "center",
     textAlignVertical: "center",
@@ -812,6 +813,7 @@ const styles = StyleSheet.create({
   },
 
   txt_filtro: {
+    fontSize: RFPercentage(2),
     color: "#fff",
     fontFamily: "Regular",
   },

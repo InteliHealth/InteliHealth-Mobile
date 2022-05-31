@@ -1,6 +1,5 @@
 import { StatusBar } from "expo-status-bar";
 import DropDownPicker from "react-native-dropdown-picker";
-import * as Device from "expo-device";
 import {
   StyleSheet,
   Text,
@@ -18,8 +17,8 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import Modal from "react-native-modal";
+import  {  RFPercentage   }  from  "react-native-responsive-fontsize" ;
 
-import IconPicker from "./components/picker/picker";
 import {
   Poppins_100Thin,
   Poppins_100Thin_Italic,
