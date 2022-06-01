@@ -15,6 +15,7 @@ import {
   TextInput,
   ScrollView,
   Platform,
+  Dimensions,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -361,65 +362,123 @@ export default function Resumo() {
         }}
       >
         <View style={styles.cadastro}>
-          <DropDownPicker
-            placeholder="Selecione o horário da notificação"
-            open={open}
-            value={date}
-            setValue={(date) => setDate(date)}
-            onPress={() => setOpen(!open)}
-            onClose={() => setOpen(false)}
-            dropDownContainerStyle={{
-              backgroundColor: "#292929",
-              borderColor: "#FE7B1D",
-            }}
-            labelStyle={{ color: "#FFFFFF" }}
-            placeholderStyle={{
-              backgroundColor: "#292929",
-              color: "#FFFFFF",
-            }}
-            style={{ backgroundColor: "#292929", borderColor: "#FE7B1D" }}
-            dropDownStyle={{
-              backgroundColor: "#292929",
-              borderColor: "#FE7B1D",
-            }}
-            arrowIconStyle={{ backgroundColor: "#FE7B1D" }}
-            items={[
-              {
-                label: "Manhã",
-                value: "2030-12-31 10:00:00.000",
-                labelStyle: { color: "#fff" },
-                selectable: true,
-              },
-              {
-                label: "Tarde",
-                value: "2030-12-31 17:00:00.000",
-                labelStyle: { color: "#fff" },
-                selectable: true,
-              },
-              {
-                label: "Noite",
-                value: "2030-12-31 22:00:00.000",
-                labelStyle: { color: "#fff" },
-                selectable: true,
-              },
-            ]}
-          />
+          {Dimensions.get("window").width > 700 ? (
+            <DropDownPicker
+              placeholder="Selecione o horário da notificação"
+              open={open}
+              value={date}
+              setValue={(date) => setDate(date)}
+              onPress={() => setOpen(!open)}
+              onClose={() => setOpen(false)}
+              dropDownContainerStyle={{
+                backgroundColor: "#292929",
+                borderColor: "#FE7B1D",
+              }}
+              labelStyle={{
+                color: "#FFFFFF",
+                fontFamily: "Regular",
+                fontSize: 20,
+              }}
+              placeholderStyle={{
+                backgroundColor: "#292929",
+                color: "#FFFFFF",
+                fontFamily: "Regular",
+                fontSize: 18,
+              }}
+              style={{
+                backgroundColor: "#292929",
+                borderColor: "#FE7B1D",
+                minHeight: 75,
+              }}
+              dropDownStyle={{
+                backgroundColor: "#292929",
+                borderColor: "#FE7B1D",
+              }}
+              arrowIconStyle={{
+                backgroundColor: "#FE7B1D",
+                width: 30,
+                height: 30,
+              }}
+              items={[
+                {
+                  label: "Manhã",
+                  value: "2030-12-31 10:00:00.000",
+                  labelStyle: { color: "#fff" },
+                  selectable: true,
+                },
+                {
+                  label: "Tarde",
+                  value: "2030-12-31 17:00:00.000",
+                  labelStyle: { color: "#fff" },
+                  selectable: true,
+                },
+                {
+                  label: "Noite",
+                  value: "2030-12-31 22:00:00.000",
+                  labelStyle: { color: "#fff" },
+                  selectable: true,
+                },
+              ]}
+            />
+          ) : (
+            <DropDownPicker
+              placeholder="Selecione o horário da notificação"
+              open={open}
+              value={date}
+              setValue={(date) => setDate(date)}
+              onPress={() => setOpen(!open)}
+              onClose={() => setOpen(false)}
+              dropDownContainerStyle={{
+                backgroundColor: "#292929",
+                borderColor: "#FE7B1D",
+              }}
+              labelStyle={{
+                color: "#FFFFFF",
+                fontFamily: "Regular",
+                fontSize: 16,
+              }}
+              placeholderStyle={{
+                backgroundColor: "#292929",
+                color: "#FFFFFF",
+                fontFamily: "Regular",
+                fontSize: 14,
+              }}
+              style={{ backgroundColor: "#292929", borderColor: "#FE7B1D" }}
+              dropDownStyle={{
+                backgroundColor: "#292929",
+                borderColor: "#FE7B1D",
+              }}
+              arrowIconStyle={{ backgroundColor: "#FE7B1D" }}
+              items={[
+                {
+                  label: "Manhã",
+                  value: "2030-12-31 10:00:00.000",
+                  labelStyle: { color: "#fff" },
+                  selectable: true,
+                },
+                {
+                  label: "Tarde",
+                  value: "2030-12-31 17:00:00.000",
+                  labelStyle: { color: "#fff" },
+                  selectable: true,
+                },
+                {
+                  label: "Noite",
+                  value: "2030-12-31 22:00:00.000",
+                  labelStyle: { color: "#fff" },
+                  selectable: true,
+                },
+              ]}
+            />
+          )}
+
           <TextInput
-            style={{
-              fontFamily: "Regular",
-              fontSize:18,
-              color: "#FFFFFF",
-              width: "80%",
-              height: 170,
-              marginTop: 10,
-              borderBottomColor: "#FE7B1D",
-              borderBottomWidth: 1,
-              height: 35,
-            }}
+            style={styles.inputNome}
             placeholder="Nome"
             placeholderTextColor={"#FFF"}
             value={nome}
             onChangeText={(nome) => setNome(nome)}
+            re
           ></TextInput>
           <TouchableOpacity
             style={styles.btn_criar}
@@ -428,15 +487,7 @@ export default function Resumo() {
               await interativePushNotification();
             }}
           >
-            <Text
-              style={{
-                fontFamily: "Regular",
-                fontSize: RFPercentage(2),
-                color: "#FFFFFF",
-              }}
-            >
-              Criar
-            </Text>
+            <Text style={styles.criarText}>Criar</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -452,50 +503,122 @@ export default function Resumo() {
           closeUpdateModal();
         }}
       >
-        <View style={styles.cadastro}>
-          <DropDownPicker
-            placeholder="Selecione o horário da notificação"
-            open={updateOpen}
-            value={date}
-            setValue={(date) => setDate(date)}
-            onPress={() => setUpdateOpen(!updateOpen)}
-            onClose={() => setUpdateOpen(false)}
-            dropDownContainerStyle={{
-              backgroundColor: "#292929",
-              borderColor: "#FE7B1D",
-            }}
-            labelStyle={{ color: "#FFFFFF" }}
-            placeholderStyle={{
-              backgroundColor: "#292929",
-              color: "#FFFFFF",
-            }}
-            style={{ backgroundColor: "#292929", borderColor: "#FE7B1D" }}
-            dropDownStyle={{
-              backgroundColor: "#292929",
-              borderColor: "#FE7B1D",
-            }}
-            arrowIconStyle={{ backgroundColor: "#FE7B1D" }}
-            items={[
-              {
-                label: "Manhã",
-                value: "2030-12-31 10:00:00.000",
-                labelStyle: { color: "#fff" },
-                selectable: true,
-              },
-              {
-                label: "Tarde",
-                value: "2030-12-31 17:00:00.000",
-                labelStyle: { color: "#fff" },
-                selectable: true,
-              },
-              {
-                label: "Noite",
-                value: "2030-12-31 22:00:00.000",
-                labelStyle: { color: "#fff" },
-                selectable: true,
-              },
-            ]}
-          />
+        <View style={styles.update}>
+          {Dimensions.get("window").width > 700 ? (
+            <DropDownPicker
+              placeholder="Selecione o horário da notificação"
+              open={updateOpen}
+              value={date}
+              setValue={(date) => setDate(date)}
+              onPress={() => setUpdateOpen(!updateOpen)}
+              onClose={() => setUpdateOpen(false)}
+              dropDownContainerStyle={{
+                backgroundColor: "#292929",
+                borderColor: "#FE7B1D",
+              }}
+              labelStyle={{
+                color: "#FFFFFF",
+                fontFamily: "Regular",
+                fontSize: 20,
+              }}
+              placeholderStyle={{
+                backgroundColor: "#292929",
+                color: "#FFFFFF",
+                fontFamily: "Regular",
+                fontSize: 18,
+                textAlign: "center",
+              }}
+              style={{
+                backgroundColor: "#292929",
+                borderColor: "#FE7B1D",
+                minHeight: 75,
+              }}
+              dropDownStyle={{
+                backgroundColor: "#292929",
+                borderColor: "#FE7B1D",
+              }}
+              arrowIconStyle={{
+                backgroundColor: "#FE7B1D",
+                width: 30,
+                height: 30,
+              }}
+              items={[
+                {
+                  label: "Manhã",
+                  value: "2030-12-31 10:00:00.000",
+                  labelStyle: { color: "#fff" },
+                  selectable: true,
+                },
+                {
+                  label: "Tarde",
+                  value: "2030-12-31 17:00:00.000",
+                  labelStyle: { color: "#fff" },
+                  selectable: true,
+                },
+                {
+                  label: "Noite",
+                  value: "2030-12-31 22:00:00.000",
+                  labelStyle: { color: "#fff" },
+                  selectable: true,
+                },
+              ]}
+            />
+          ) : (
+            <DropDownPicker
+              placeholder="Selecione o horário da notificação"
+              open={updateOpen}
+              value={date}
+              setValue={(date) => setDate(date)}
+              onPress={() => setUpdateOpen(!updateOpen)}
+              onClose={() => setUpdateOpen(false)}
+              dropDownContainerStyle={{
+                backgroundColor: "#292929",
+                borderColor: "#FE7B1D",
+              }}
+              labelStyle={{
+                color: "#FFFFFF",
+                fontFamily: "Regular",
+                fontSize: 16,
+              }}
+              placeholderStyle={{
+                backgroundColor: "#292929",
+                color: "#FFFFFF",
+                fontFamily: "Regular",
+                fontSize: 14,
+              }}
+              style={{
+                backgroundColor: "#292929",
+                borderColor: "#FE7B1D",
+                minHeight: 50,
+              }}
+              dropDownStyle={{
+                backgroundColor: "#292929",
+                borderColor: "#FE7B1D",
+              }}
+              arrowIconStyle={{ backgroundColor: "#FE7B1D" }}
+              items={[
+                {
+                  label: "Manhã",
+                  value: "2030-12-31 10:00:00.000",
+                  labelStyle: { color: "#fff" },
+                  selectable: true,
+                },
+                {
+                  label: "Tarde",
+                  value: "2030-12-31 17:00:00.000",
+                  labelStyle: { color: "#fff" },
+                  selectable: true,
+                },
+                {
+                  label: "Noite",
+                  value: "2030-12-31 22:00:00.000",
+                  labelStyle: { color: "#fff" },
+                  selectable: true,
+                },
+              ]}
+            />
+          )}
+
           <TouchableOpacity style={styles.btn_criar} onPress={updateReminder}>
             <Text
               style={{
@@ -557,29 +680,72 @@ export default function Resumo() {
               </View>
             </TouchableOpacity>
           </View>
-          <View style={{ width: "80%", alignItems: "center", alignSelf: "center" }}>
-            <VictoryChart height={425} theme={VictoryTheme.material}>
-              <VictoryArea
-                interpolation="basis"
-                style={{
-                  data: {
-                    fill: "#b5540e",
-                    stroke: "#000",
-                    strokeWidth: 2,
-                    fontStyle: "bold",
-                  },
-                  parent: { border: "1px solid #000" },
-                  labels: { fontSize: 10, color: "#000" },
-                }}
-                data={chartData}
-                animate={{
-                  duration: 1000,
-                  onLoad: { duration: 500 },
-                }}
-                y="realizado"
-              />
-            </VictoryChart>
-          </View>
+          {Dimensions.get("window").width > 700 ? (
+            <View
+              style={{
+                width: "80%",
+                alignItems: "center",
+                alignSelf: "center",
+              }}
+            >
+              <VictoryChart
+                height={750}
+                width={725}
+                theme={VictoryTheme.material}
+              >
+                <VictoryArea
+                  interpolation="basis"
+                  style={{
+                    data: {
+                      fill: "#b5540e",
+                      stroke: "#000",
+                      strokeWidth: 2,
+                      fontStyle: "bold",
+                    },
+                    parent: { border: "1px solid #000" },
+                    labels: { fontSize: 10, color: "#000" },
+                  }}
+                  data={chartData}
+                  animate={{
+                    duration: 1000,
+                    onLoad: { duration: 500 },
+                  }}
+                  y="realizado"
+                />
+              </VictoryChart>
+            </View>
+          ) : (
+            <View
+              style={{
+                width: "80%",
+                alignItems: "center",
+                alignSelf: "center",
+              }}
+            >
+              <VictoryChart height={400} theme={VictoryTheme.material}>
+                <VictoryArea
+                  interpolation="basis"
+                  style={{
+                    data: {
+                      fill: "#b5540e",
+                      stroke: "#000",
+                      strokeWidth: 2,
+                      fontStyle: "bold",
+                    },
+                    parent: { border: "1px solid #000" },
+                    labels: { fontSize: 10, color: "#000" },
+                  }}
+                  data={chartData}
+                  animate={{
+                    duration: 1000,
+                    onLoad: { duration: 500 },
+                  }}
+                  y="realizado"
+                />
+              </VictoryChart>
+            </View>
+          )}
+
           <View>
             <View style={styles.container_filtro}>
               <TouchableOpacity
@@ -663,220 +829,499 @@ async function registerForPushNotificationsAsync() {
   return token;
 }
 
-const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    backgroundColor: "#3F3F3F",
-    width: "100%",
-    height: 48,
-    marginTop: 25,
-  },
+if (Dimensions.get("window").width > 700) {
+  var styles = StyleSheet.create({
+    background: {
+      flex: 1,
+      backgroundColor: "#3F3F3F",
+      width: "100%",
+      height: 48,
+      marginTop: 25,
+    },
 
-  logo_header: {
-    height: 25,
-    marginLeft: 305,
-    marginTop: 15,
-  },
+    logo_header: {
+      height: 25,
+      marginLeft: 305,
+      marginTop: 15,
+    },
 
-  header: {
-    width: "100%",
-    height: 30,
-  },
+    header: {
+      width: "100%",
+      height: 30,
+    },
 
-  head: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 15,
-  },
+    head: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginTop: 15,
+    },
 
-  container: {
-    flexDirection: "row",
-  },
+    container: {
+      flexDirection: "row",
+    },
 
-  seta: {
-    marginLeft: 45,
-    height: 15,
-    width: 23,
-    marginTop: 15,
-  },
+    inputNome: {
+      fontFamily: "Regular",
+      fontSize: 24,
+      color: "#FFFFFF",
+      width: "80%",
+      height: 170,
+      marginTop: 10,
+      borderBottomColor: "#FE7B1D",
+      borderBottomWidth: 1,
+      height: 35,
+    },
 
-  container_dados: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 40,
-    color: "#FFFF",
-  },
+    seta: {
+      marginLeft: 45,
+      height: 15,
+      width: 23,
+      marginTop: 15,
+    },
 
-  nome: {
-    color: "#FFFF",
-    borderColor: "#FC791C",
-    width: 270,
-    height: 70,
-    marginTop: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-evenly",
+    container_dados: {
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 40,
+      color: "#FFFF",
+    },
 
-    backgroundColor: "transparent",
-    borderWidth: 2,
-    borderRadius: 10,
-    // shadowOffset: { height: 1, width: 1 },
-  },
+    nome: {
+      color: "#FFFF",
+      borderColor: "#FC791C",
+      width: 270,
+      height: 70,
+      marginTop: 10,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-evenly",
 
-  container_dados1: {
-    color: "#FFFF",
-    borderColor: "#FC791C",
-    width: "75%",
-    height: 70,
-    marginTop: "10%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    backgroundColor: "transparent",
-    borderWidth: 2,
-    borderRadius: 10,
-  },
+      backgroundColor: "transparent",
+      borderWidth: 2,
+      borderRadius: 10,
+      // shadowOffset: { height: 1, width: 1 },
+    },
 
-  container_not: {
-    color: "#FFFF",
-    borderColor: "#FC791C",
-    width: "75%",
-    height: 70,
-    marginTop: 40,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    alignContent: "center",
-    alignSelf: "center",
-    textAlign: "center",
-    textAlignVertical: "center",
-    backgroundColor: "transparent",
-    borderWidth: 2,
-    borderRadius: 10,
-  },
+    container_dados1: {
+      color: "#FFFF",
+      borderColor: "#FC791C",
+      width: "75%",
+      height: 70,
+      marginTop: "10%",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      alignSelf: "center",
+      backgroundColor: "transparent",
+      borderWidth: 2,
+      borderRadius: 10,
+    },
 
-  hora: {
-    color: "#FC791C",
-    fontSize: 25,
-    fontFamily: "Regular",
-    textAlign: "center",
-    textAlignVertical: "center",
-  },
+    criarText: {
+      fontFamily: "Regular",
+      fontSize: 24,
+      color: "#FFFFFF",
+    },
 
-  container_resposta: {
-    display: "flex",
-    flexDirection: "row",
-    width: "80%",
-    alignSelf: "center",
-    justifyContent: "center",
-  },
+    container_not: {
+      color: "#FFFF",
+      borderColor: "#FC791C",
+      width: "75%",
+      height: 70,
+      marginTop: 40,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      alignContent: "center",
+      alignSelf: "center",
+      textAlign: "center",
+      textAlignVertical: "center",
+      backgroundColor: "transparent",
+      borderWidth: 2,
+      borderRadius: 10,
+    },
 
-  btn_resposta: {
-    color: "#FFFF",
-    borderColor: "#FC791C",
-    width: "90%",
-    height: 60,
-    marginTop: "10%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    backgroundColor: "transparent",
-    borderWidth: 2,
-    borderRadius: 20,
-  },
+    hora: {
+      color: "#FC791C",
+      fontSize: 25,
+      fontFamily: "Regular",
+      textAlign: "center",
+      textAlignVertical: "center",
+    },
 
-  container_filtro: {
-    display: "flex",
-    flexDirection: "row",
-    width: "70%",
-    alignSelf: "center",
-    justifyContent: "center",
-    marginBottom: 30,
-  },
+    container_resposta: {
+      display: "flex",
+      flexDirection: "row",
+      width: "82.5%",
+      alignSelf: "center",
+      justifyContent: "center",
+    },
 
-  btn_filtro: {
-    color: "#FFFF",
-    borderColor: "#FC791C",
-    width: "65%",
-    height: 60,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
-    backgroundColor: "transparent",
-    borderWidth: 2,
-    borderRadius: 20,
-  },
+    btn_resposta: {
+      color: "#FFFF",
+      borderColor: "#FC791C",
+      width: "90%",
+      height: 60,
+      marginTop: "10%",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      alignSelf: "center",
+      backgroundColor: "transparent",
+      borderWidth: 2,
+      borderRadius: 20,
+    },
 
-  txt_filtro: {
-    fontSize: RFPercentage(2),
-    color: "#fff",
-    fontFamily: "Regular",
-  },
+    container_filtro: {
+      display: "flex",
+      flexDirection: "row",
+      width: "70%",
+      alignSelf: "center",
+      justifyContent: "center",
+      marginBottom: 30,
+    },
 
-  nome1: {
-    color: "#FC791C",
-  },
+    btn_filtro: {
+      color: "#FFFF",
+      borderColor: "#FC791C",
+      width: "65%",
+      height: 60,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      alignSelf: "center",
+      backgroundColor: "transparent",
+      borderWidth: 2,
+      borderRadius: 20,
+    },
 
-  engrenagem: {},
+    txt_filtro: {
+      fontSize: RFPercentage(2),
+      color: "#fff",
+      fontFamily: "Regular",
+    },
 
-  backgroundModal: {
-    backgroundColor: "#3F3F3F",
-    width: 300,
-    height: 250,
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: 15,
-    borderRadius: 20,
-  },
+    nome1: {
+      color: "#FC791C",
+    },
 
-  lembrete: {
-    color: "#FFFF",
-    borderColor: "#FC791C",
-    width: 250,
-    height: 70,
-    backgroundColor: "transparent",
+    inputNome: {
+      fontFamily: "Regular",
+      fontSize: 20,
+      color: "#FFFFFF",
+      width: "80%",
+      height: 170,
+      marginTop: 10,
+      borderBottomColor: "#FE7B1D",
+      borderBottomWidth: 1,
+      height: 35,
+    },
 
-    borderBottomWidth: 1,
-  },
+    backgroundModal: {
+      backgroundColor: "#3F3F3F",
+      width: 300,
+      height: 250,
+      alignItems: "center",
+      justifyContent: "center",
+      marginLeft: 15,
+      borderRadius: 20,
+    },
 
-  btnLogin: {
-    marginTop: 25,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    height: 50,
-    width: 130,
-    backgroundColor: "transparent",
-    borderColor: "#FC7B20",
-    borderWidth: 1,
-    borderRadius: 50,
-  },
-  cadastro: {
-    width: "75%",
-    height: "50%",
-    backgroundColor: "#292929",
-    borderRadius: 20,
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    alignSelf: "center",
-  },
-  btn_criar: {
-    height: "12.5%",
-    width: "50%",
-    backgroundColor: "transparent",
-    borderColor: "#FC7B20",
-    borderWidth: 1,
-    borderRadius: 50,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  chart:{
-    width: "80%",
-    height: "50%",
-  }
-});
+    lembrete: {
+      color: "#FFFF",
+      borderColor: "#FC791C",
+      width: 250,
+      height: 70,
+      backgroundColor: "transparent",
+
+      borderBottomWidth: 1,
+    },
+
+    btnLogin: {
+      marginTop: 25,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      height: 50,
+      width: 130,
+      backgroundColor: "transparent",
+      borderColor: "#FC7B20",
+      borderWidth: 1,
+      borderRadius: 50,
+    },
+    cadastro: {
+      width: "75%",
+      height: "50%",
+      backgroundColor: "#292929",
+      borderRadius: 20,
+      justifyContent: "space-evenly",
+      alignItems: "center",
+      alignSelf: "center",
+    },
+    update: {
+      width: "65%",
+      height: "45%",
+      backgroundColor: "#292929",
+      borderRadius: 20,
+      justifyContent: "space-evenly",
+      alignItems: "center",
+      alignSelf: "center",
+    },
+    btn_criar: {
+      height: 60,
+      width: "35%",
+      backgroundColor: "transparent",
+      borderColor: "#FC7B20",
+      borderWidth: 1,
+      borderRadius: 50,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    chart: {
+      width: "80%",
+      height: "50%",
+    },
+  });
+} else {
+  var styles = StyleSheet.create({
+    background: {
+      flex: 1,
+      backgroundColor: "#3F3F3F",
+      width: "100%",
+      height: 48,
+      marginTop: 25,
+    },
+
+    logo_header: {
+      height: 25,
+      marginLeft: 305,
+      marginTop: 15,
+    },
+
+    header: {
+      width: "100%",
+      height: 30,
+    },
+
+    head: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginTop: 15,
+    },
+
+    container: {
+      flexDirection: "row",
+    },
+
+    criarText: {
+      fontFamily: "Regular",
+      fontSize: 16,
+      color: "#FFFFFF",
+    },
+
+    seta: {
+      marginLeft: 45,
+      height: 15,
+      width: 23,
+      marginTop: 15,
+    },
+
+    container_dados: {
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 40,
+      color: "#FFFF",
+    },
+
+    inputNome: {
+      fontFamily: "Regular",
+      fontSize: 20,
+      color: "#FFFFFF",
+      width: "80%",
+      height: 170,
+      marginTop: 10,
+      borderBottomColor: "#FE7B1D",
+      borderBottomWidth: 1,
+      height: 35,
+    },
+
+    nome: {
+      color: "#FFFF",
+      borderColor: "#FC791C",
+      width: 270,
+      height: 70,
+      marginTop: 10,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-evenly",
+
+      backgroundColor: "transparent",
+      borderWidth: 2,
+      borderRadius: 10,
+      // shadowOffset: { height: 1, width: 1 },
+    },
+
+    container_dados1: {
+      color: "#FFFF",
+      borderColor: "#FC791C",
+      width: 270,
+      height: 70,
+      marginTop: 40,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      alignSelf: "center",
+      backgroundColor: "transparent",
+      borderWidth: 2,
+      borderRadius: 10,
+    },
+
+    container_not: {
+      color: "#FFFF",
+      borderColor: "#FC791C",
+      width: 280,
+      height: 70,
+      marginTop: 40,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      alignContent: "center",
+      alignSelf: "center",
+      textAlign: "center",
+      textAlignVertical: "center",
+      backgroundColor: "transparent",
+      borderWidth: 2,
+      borderRadius: 10,
+    },
+
+    hora: {
+      color: "#FC791C",
+      fontSize: 20,
+      fontFamily: "Regular",
+      textAlign: "center",
+      textAlignVertical: "center",
+    },
+
+    container_resposta: {
+      display: "flex",
+      flexDirection: "row",
+      width: 280,
+      alignSelf: "center",
+      justifyContent: "space-between",
+    },
+
+    btn_resposta: {
+      color: "#FFFF",
+      borderColor: "#FC791C",
+      width: 125,
+      height: 60,
+      marginTop: 20,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      alignSelf: "center",
+      backgroundColor: "transparent",
+      borderWidth: 2,
+      borderRadius: 20,
+    },
+
+    container_filtro: {
+      display: "flex",
+      flexDirection: "row",
+      width: 280,
+      alignSelf: "center",
+      justifyContent: "space-between",
+      marginBottom: 30,
+    },
+
+    btn_filtro: {
+      color: "#FFFF",
+      borderColor: "#FC791C",
+      width: 80,
+      height: 60,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      alignSelf: "center",
+      backgroundColor: "transparent",
+      borderWidth: 2,
+      borderRadius: 20,
+    },
+
+    txt_filtro: {
+      color: "#fff",
+      fontFamily: "Regular",
+    },
+
+    nome1: {
+      color: "#FC791C",
+    },
+
+    engrenagem: {},
+
+    backgroundModal: {
+      backgroundColor: "#3F3F3F",
+      width: 300,
+      height: 250,
+      alignItems: "center",
+      justifyContent: "center",
+      marginLeft: 15,
+      borderRadius: 20,
+    },
+
+    lembrete: {
+      color: "#FFFF",
+      borderColor: "#FC791C",
+      width: 250,
+      height: 70,
+      backgroundColor: "transparent",
+
+      borderBottomWidth: 1,
+    },
+
+    btnLogin: {
+      marginTop: 25,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      height: 50,
+      width: 130,
+      backgroundColor: "transparent",
+      borderColor: "#FC7B20",
+      borderWidth: 1,
+      borderRadius: 50,
+    },
+    cadastro: {
+      width: 260,
+      height: 320,
+      backgroundColor: "#292929",
+      borderRadius: 20,
+      justifyContent: "space-evenly",
+      alignItems: "center",
+      alignSelf: "center",
+    },
+    update: {
+      width: 260,
+      height: 320,
+      backgroundColor: "#292929",
+      borderRadius: 20,
+      justifyContent: "space-evenly",
+      alignItems: "center",
+      alignSelf: "center",
+    },
+    btn_criar: {
+      height: 45,
+      width: 120,
+      backgroundColor: "transparent",
+      borderColor: "#FC7B20",
+      borderWidth: 1,
+      borderRadius: 50,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  });
+}

@@ -15,9 +15,6 @@ import {
   ImageBackground,
   Image,
   TouchableOpacity,
-  Link,
-  Alert,
-  Platform,
 } from "react-native";
 
 WebBrowser.maybeCompleteAuthSession();

@@ -7,9 +7,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon_dark.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash-dark.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#3F3F3F"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -20,15 +20,16 @@
     "ios": {
       "bundleIdentifier": "com.intelih.intelihealth",
       "buildNumber": "1",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "icon": "./assets/icon_dark.png"
     },
     "android": {
       "package": "com.intelih.intelihealth",
       "googleServicesFile": "./google-services.json",
       "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/icon_dark.png",
+        "backgroundColor": "#3F3F3F"
       }
     },
     "web": {
