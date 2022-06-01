@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "819765853091",
-    "project_id": "intelimessage",
-    "storage_bucket": "intelimessage.appspot.com"
+    "project_number": "772277287209",
+    "project_id": "intelihealth-6edaf",
+    "storage_bucket": "intelihealth-6edaf.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:819765853091:android:4e2131eb5a6f1d5aa2f816",
+        "mobilesdk_app_id": "1:772277287209:android:3eb3a7a6d8e57eef1f1f38",
         "android_client_info": {
           "package_name": "com.intelih.intelihealth"
         }
       },
       "oauth_client": [
         {
-          "client_id": "819765853091-8n2pf88n3600jef5svp57dttq3ha916d.apps.googleusercontent.com",
+          "client_id": "772277287209-a64n95e0bsodjsqsrtud9poqh7uonuhb.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAgGulkg6bdFxUKxEW6qyujvYhYOh0fWec"
+          "current_key": "AIzaSyBe1ak3AaoDJCntvYF6d2BQzaBmKrFQenQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "819765853091-8n2pf88n3600jef5svp57dttq3ha916d.apps.googleusercontent.com",
+              "client_id": "772277287209-a64n95e0bsodjsqsrtud9poqh7uonuhb.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
