@@ -781,7 +781,7 @@ export default function Resumo() {
 async function interativePushNotification() {
   await Notifications.setNotificationCategoryAsync("teste", [
     {
-      buttonTitle: "CLICA AQUI KRL",
+      buttonTitle: "Abrir aplicativo",
     },
   ]),
     await Notifications.scheduleNotificationAsync({
